@@ -19,6 +19,7 @@
 
     this.update = function(character) 
     {
+        console.debug('updating... ' + character);
         var pos = character.position();
         ship.moveTo(pos.x, pos.y);
     }
