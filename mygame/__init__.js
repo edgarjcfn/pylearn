@@ -2,6 +2,7 @@ var $builtinmodule = function(name)
 {
     'use strict';
 
+    var canvas = Sk.canvas;
 
     var Character = function() {
         this.health = 0;
@@ -10,8 +11,8 @@ var $builtinmodule = function(name)
     };
 
     Character.prototype.moveForward = function(n) {
-        this.x += n;
-        console.debug(this.x);
+        this.y += n;
+        canvas.update(this);
     };
 
     Character.prototype.jump = function() {
@@ -35,7 +36,6 @@ var $builtinmodule = function(name)
     mod.alert = new Sk.builtin.func(function(a) {
         alert(a.v);
     });
-
 
     // 
     // classes
