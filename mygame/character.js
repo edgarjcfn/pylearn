@@ -29,7 +29,7 @@ Character.prototype.get_position = function() {
 };
 
 Character.prototype.get_direction = function() {
-	return direction;
+	return this.direction;
 }
 
 Character.prototype.set_direction = function(dir) {

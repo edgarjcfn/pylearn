@@ -4,20 +4,20 @@ var MoveCommand = function(argv, character, animator) {
 	this.next = null;
 	this.tiles = argv.tiles || 1;
 
-	var execute = function() {
+	this.execute = function() {
 
 		switch (character.get_direction()) {
 			case (Direction.N) :
-			character.moveBy(0, -tiles);
+			character.moveBy(0, -(this.tiles));
 			break;
 			case (Direction.S) :
-			character.moveBy(0, tiles);
+			character.moveBy(0, (this.tiles));
 			break;
 			case (Direction.E) :
-			character.moveBy(tiles, 0);
+			character.moveBy((this.tiles), 0);
 			break;
 			case (Direction.W) :
-			character.moveBy(-tiles, 0);
+			character.moveBy(-(this.tiles), 0);
 			break;
 		}
 
@@ -29,7 +29,7 @@ var MoveCommand = function(argv, character, animator) {
 var TurnLeftCommand = function(argv, character, animator) {
 	this.next = null;
 
-	var execute = function() {
+	this.execute = function() {
 		switch (character.get_direction()) {
 			case (Direction.N) :
 				character.set_direction(Direction.W);
@@ -53,7 +53,7 @@ var TurnLeftCommand = function(argv, character, animator) {
 var TurnRightCommand = function(argv, character, animator) {
 	this.next = null;
 
-	var exectute = function() {
+	this.exectute = function() {
 		switch (character.get_direction()) {
 			case (Direction.N) :
 				character.set_direction(Direction.E);

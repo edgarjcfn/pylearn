@@ -19,14 +19,12 @@ var $builtinmodule = function(name)
     // 
     mod.Character = Sk.misceval.buildClass(mod, function($gbl, $loc) {
          $loc.__init__ = new Sk.builtin.func(function(self) {
-            self.character = new Character(Sk.canvas);
+            self.character = new Character();
          });
 
          $loc.moveForward = new Sk.builtin.func(function(self,x) {
-            self.character.moveForward(x.v);
-         });
-         $loc.jump = new Sk.builtin.func(function(self) {
-            self.character.jump();
+            var moveCmd = new MoveCommand(x.v, self.character, Sk.animator);
+            Sk.commandChain.append(moveCmd);
          });
          $loc.position = new Sk.builtin.func(function(self) {
             var pos = self.character.position();

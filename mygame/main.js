@@ -40,23 +40,32 @@
         ship.rotateTo(getDirectionAngle(dir));
         next();
     };
-
-    // 
-    // Helper methods
-    // 
-    this.getDirectionAngle = function(dir) {
-        switch (dir) 
-        {
-            case Direction.N :
-                return 0;
-            case Direction.E : 
-                return 90;
-            case Direction.S :
-                return 180;
-            case Direction.W : 
-                return 270;
-        }
-
-        return 0;
-    }
 };
+
+
+
+// 
+// Helper methods
+// 
+function getDirectionAngle(dir) {
+    switch (dir) 
+    {
+        case Direction.N :
+            return 0;
+        case Direction.E : 
+            return 90;
+        case Direction.S :
+            return 180;
+        case Direction.W : 
+            return 270;
+    }
+
+    return 0;
+}
+
+function getWorldPos(tilePos) {
+    return {
+        'x' : tilePos.x*30, 
+        'y' : tilePos.y*30
+    };
+}

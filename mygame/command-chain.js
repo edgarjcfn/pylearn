@@ -1,33 +1,39 @@
 var CommandChain = function() {
 	this.commands = [];
 	this.currentIndex = 0;
+};
 
-	var append = function(command) {
+CommandChain.prototype.append = function(command) {
 
-		if (this.commands.length > 0)
-		{
-			var lastCmd = this.commands[this.commands.length-1];
-			lastCmd.next = proceed;
-		}
-
-		this.commands.push(fn);
+	if (this.commands.length > 0)
+	{
+		var lastCmd = this.commands[this.commands.length-1];
+		var _this = this;
+		lastCmd.next = function() {
+			_this.proceed()
+		};
 	}
 
-	var proceed = function() {
-		this.currentIndex++;
-		execute();
+	this.commands.push(command);
+};
+
+CommandChain.prototype.proceed = function() {
+	console.debug('this', this);
+	this.currentIndex++;
+	this.execute();
+};
+
+CommandChain.prototype.execute = function() {
+	if (this.currentIndex < this.commands.length)
+	{
+		this.commands[this.currentIndex].execute();
 	}
-
-	var execute = function() {
-		if (currentIndex < commands.length)
-		{
-			this.commands[currentIndex].execute();
-		}
-		else
-		{
-			console.log('command chain finished')
-		}
+	else
+	{
+		console.log('command chain finished')
 	}
+};
 
-
-}
+CommandChain.prototype.clear = function () {
+	this.commands = [];
+};
