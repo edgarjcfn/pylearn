@@ -1,3 +1,5 @@
+'use strict';
+
 var CommandChain = function() {
 	this.commands = [];
 	this.currentIndex = 0;
@@ -5,14 +7,10 @@ var CommandChain = function() {
 
 CommandChain.prototype.append = function(command) {
 
-	if (this.commands.length > 0)
-	{
-		var lastCmd = this.commands[this.commands.length-1];
-		var _this = this;
-		lastCmd.next = function() {
-			_this.proceed()
-		};
-	}
+	var _this = this;
+	command.next = function() {
+		_this.proceed();
+	};
 
 	this.commands.push(command);
 };
