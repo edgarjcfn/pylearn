@@ -1,19 +1,37 @@
 'use strict';
 
-var Character = function(canvas) {
-    this.health = 0;
+var Direction = {
+	N: 'N',
+	S: 'S',
+	E: 'E',
+	W: 'W',
+}
+
+var Character = function() {
     this.x = 0;
     this.y = 0;
-    this.canvas = canvas;
+    this.direction = Direction.N;
 };
 
-Character.prototype.moveForward = function(n) {
-    this.y += n;
-    this.canvas.update(this);
+Character.prototype.moveTo = function (x, y) {
+	this.x = x;
+	this.y = y;
 };
 
+Character.prototype.moveBy = function (x, y) {
+	this.x += x;
+	this.y += y;
+};
 
-Character.prototype.position  = function() {
+Character.prototype.get_position = function() {
     var pos = {'x':this.x, 'y':this.y};
     return pos;
+};
+
+Character.prototype.get_direction = function() {
+	return direction;
+}
+
+Character.prototype.set_direction = function(dir) {
+	this.direction = dir;
 };

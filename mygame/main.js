@@ -17,12 +17,46 @@
         wade.addSceneObject(ship);
     };
 
-    this.update = function(character) 
-    {
-        console.debug('updating... ' + character);
-        var pos = character.position();
-        ship.moveTo(pos.x, pos.y);
+    //
+    // Character Animator methods
+    // 
+    this.moveTo = function(tileCoord, next) {
+        var worldPos = getWorldPos(tileCoord);
+        ship.moveTo(worldPos.x, worldPos.y, 20);
+        wade.setMainLoopCallback(function()
+        {
+            var position = ship.getPosition();
+            if (position.x == worldPos.x &&
+                position.y == worldPos.y)
+            {
+                // Arrived at position
+                wade.setMainLoopCallback(null, 'move');
+                next();
+            }
+        }, 'move');
+    };
+
+    this.rotateTo = function(dir, next) {
+        ship.rotateTo(getDirectionAngle(dir));
+        next();
+    };
+
+    // 
+    // Helper methods
+    // 
+    this.getDirectionAngle = function(dir) {
+        switch (dir) 
+        {
+            case Direction.N :
+                return 0;
+            case Direction.E : 
+                return 90;
+            case Direction.S :
+                return 180;
+            case Direction.W : 
+                return 270;
+        }
+
+        return 0;
     }
-
-
 };
