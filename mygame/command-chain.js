@@ -16,7 +16,6 @@ CommandChain.prototype.append = function(command) {
 };
 
 CommandChain.prototype.proceed = function() {
-	console.debug('this', this);
 	this.currentIndex++;
 	this.execute();
 };
@@ -24,6 +23,7 @@ CommandChain.prototype.proceed = function() {
 CommandChain.prototype.execute = function() {
 	if (this.currentIndex < this.commands.length)
 	{
+		console.log('Going to execute command ' + this.currentIndex);
 		this.commands[this.currentIndex].execute();
 	}
 	else

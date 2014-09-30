@@ -26,7 +26,7 @@ var MoveCommand = function(argv, character, animator) {
 	}
 }
 
-var TurnLeftCommand = function(argv, character, animator) {
+var TurnLeftCommand = function(character, animator) {
 	this.next = null;
 
 	this.execute = function() {
@@ -50,10 +50,10 @@ var TurnLeftCommand = function(argv, character, animator) {
 	}
 }
 
-var TurnRightCommand = function(argv, character, animator) {
+var TurnRightCommand = function(character, animator) {
 	this.next = null;
 
-	this.exectute = function() {
+	this.execute = function() {
 		switch (character.get_direction()) {
 			case (Direction.N) :
 				character.set_direction(Direction.E);

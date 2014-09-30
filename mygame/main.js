@@ -22,7 +22,7 @@
     // 
     this.moveTo = function(tileCoord, next) {
         var worldPos = getWorldPos(tileCoord);
-        ship.moveTo(worldPos.x, worldPos.y, 20);
+        ship.moveTo(worldPos.x, worldPos.y, 40);
         wade.setMainLoopCallback(function()
         {
             var position = ship.getPosition();
@@ -53,11 +53,11 @@ function getDirectionAngle(dir) {
         case Direction.N :
             return 0;
         case Direction.E : 
-            return 90;
+            return Math.PI / 2;
         case Direction.S :
-            return 180;
+            return Math.PI;
         case Direction.W : 
-            return 270;
+            return 3 * Math.PI / 2;
     }
 
     return 0;
