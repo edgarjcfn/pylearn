@@ -24,6 +24,7 @@
   "dependencies": {
     "jquery": "~2.1.1",
     "wade": "http://www.clockworkchilli.com/index.php/developers/get_wade_zip",
-    "ace-builds": "~1.1.7"
+    "ace-builds": "~1.1.7",
+    "skulpt": "skulpt/skulpt-dist#~0.9.7"
   }
 }
