@@ -22,7 +22,7 @@
     // 
     this.moveTo = function(tileCoord, next) {
         var worldPos = getWorldPos(tileCoord);
-        ship.moveTo(worldPos.x, worldPos.y, 40);
+        ship.moveTo(worldPos.x, worldPos.y, 100);
         wade.setMainLoopCallback(function()
         {
             var position = ship.getPosition();
