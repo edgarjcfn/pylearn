@@ -23,7 +23,6 @@ module.exports = function(grunt) {
                     interrupt: true
                 }
             },
-
             
         },
         copy: {
@@ -32,14 +31,26 @@ module.exports = function(grunt) {
                     {expand:true, src:['pylearn/dev/skulpt/*.js'], dest:'pylearn/dist/', flatten:true}
                 ]
             }
+        },
+        'http-server' : {
+            dev : {
+                root: './',
+                port: 8081
+            }
+        },
+        concurrent : {
+            dev : ['http-server', 'watch']
         }
+
         
     });
 
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-http-server');
+    grunt.loadNpmTasks('grunt-concurrent');
 
-    grunt.registerTask('dev', ['watch'])
+    grunt.registerTask('dev', ['concurrent:dev'])
     grunt.registerTask('on-change', ['concat:game', 'copy:skulpt']);
 };

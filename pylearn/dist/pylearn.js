@@ -15,9 +15,11 @@ CharacterAnimator.prototype.moveTo = function (tile, next) {
 
 CharacterAnimator.prototype.rotateTo = function(direction, next) {
 	var angle = getDirectionAngle(direction);
-	var rotateTween = this._game.add.tween(this._ship).to({rotation:angle}, 500);
-	rotateTween.onComplete.add(next);
-	rotateTween.start();
+	// var rotateTween = this._game.add.tween(this._ship).to({rotation:angle}, 500);
+	// rotateTween.onComplete.add(next);
+	// rotateTween.start();
+    this._ship.rotation = angle;
+    next();
 }
 
 CharacterAnimator.prototype.update = function(sprite) {
