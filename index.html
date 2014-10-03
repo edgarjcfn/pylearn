@@ -36,8 +36,7 @@
 
   <button type="button" onclick="runPython()">Run</button> 
   
-    <div id="editor">
-import mygame
+  <div id="editor">import mygame
 
 char = mygame.Character();
 char.moveForward(3);
@@ -47,10 +46,11 @@ char.turnLeft();
 char.moveForward(7);
 char.turnLeft();
 char.moveForward(9);
-    </div><br /> 
 
-    <div id="gameCanvas" style="float:right; width:60%; height:600px">
-    </div>
+  </div><br /> 
+
+  <div id="gameCanvas" style="float:right; width:60%; height:600px">
+  </div>
   
 
 
@@ -60,6 +60,8 @@ char.moveForward(9);
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/monokai");
     editor.getSession().setMode("ace/mode/python");
+    editor.setFontSize('16pt');
+    editor.setHighlightActiveLine(true);
 
   });
   </script>
@@ -67,23 +69,23 @@ char.moveForward(9);
   <script id="skulpt" type="text/javascript"> 
 // output functions are configurable.  This one just appends some text
 // to a pre element.
-  function builtinRead(x) {
-    if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
-      throw "File not found: '" + x + "'";
-    return Sk.builtinFiles["files"][x];
-  }
+function builtinRead(x) {
+  if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
+    throw "File not found: '" + x + "'";
+  return Sk.builtinFiles["files"][x];
+}
 
-  function runPython() { 
-    var prog = ace.edit("editor").getValue(); 
-    
-    Sk.externalLibraries = {
-      mygame : {
-        path : 'pylearn/dist/pylearn.skulpt.js',
-        dependencies : []
-      },
-    };
-    Sk.animator = characterAnimator;
-    Sk.commandChain = new CommandChain();
+function runPython() { 
+  var prog = ace.edit("editor").getValue(); 
+
+  Sk.externalLibraries = {
+    mygame : {
+      path : 'pylearn/dist/pylearn.skulpt.js',
+      dependencies : []
+    },
+  };
+  Sk.animator = characterAnimator;
+  Sk.commandChain = new CommandChain(updateLine);
     // Sk.pre = "output";
     Sk.configure({read:builtinRead});
 
@@ -95,7 +97,13 @@ char.moveForward(9);
       alert(e.toString())
     }
   } 
-</script>
+
+  function updateLine(lineNumber) {
+    var editor = ace.edit("editor");
+    editor.gotoLine(lineNumber);
+    console.debug('current line', lineNumber);
+  }
+  </script>
 
 </body> 
 

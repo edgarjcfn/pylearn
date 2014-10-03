@@ -1,18 +1,19 @@
 'use strict';
 
-var CommandChain = function() {
+var CommandChain = function(executeHandler) {
 	this.commands = [];
 	this.currentIndex = 0;
+	this.executeHandler = executeHandler;
 };
 
-CommandChain.prototype.append = function(command) {
+CommandChain.prototype.append = function(command, lineNumber) {
 
 	var _this = this;
 	command.next = function() {
 		_this.proceed();
 	};
 
-	this.commands.push(command);
+	this.commands.push({lineNumber:lineNumber, command:command});
 };
 
 CommandChain.prototype.proceed = function() {
@@ -23,8 +24,11 @@ CommandChain.prototype.proceed = function() {
 CommandChain.prototype.execute = function() {
 	if (this.currentIndex < this.commands.length)
 	{
-		console.log('Going to execute command ' + this.currentIndex);
-		this.commands[this.currentIndex].execute();
+		var toExecute = this.commands[this.currentIndex];
+		// Notify line number
+		this.executeHandler(toExecute.lineNumber);
+		// Execute command
+		toExecute.command.execute();
 	}
 	else
 	{

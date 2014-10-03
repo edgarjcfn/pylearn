@@ -8,18 +8,16 @@ var CharacterAnimator = function(scene, character) {
 
 CharacterAnimator.prototype.moveTo = function (tile, next) {
 	var actualPos = getWorldPos(tile);
-	var moveTween = this._game.add.tween(this._ship).to(actualPos, 500);
+	var moveTween = this._game.add.tween(this._ship).to(actualPos, 1000);
 	moveTween.onComplete.add(next);
 	moveTween.start();
 }
 
 CharacterAnimator.prototype.rotateTo = function(direction, next) {
 	var angle = getDirectionAngle(direction);
-	// var rotateTween = this._game.add.tween(this._ship).to({rotation:angle}, 500);
-	// rotateTween.onComplete.add(next);
-	// rotateTween.start();
-    this._ship.rotation = angle;
-    next();
+	var rotateTween = this._game.add.tween(this._ship).to({rotation:angle}, 1000);
+	rotateTween.onComplete.add(next);
+	rotateTween.start();
 }
 
 CharacterAnimator.prototype.update = function(sprite) {
@@ -91,19 +89,20 @@ Character.prototype.set_direction = function(dir) {
 
 'use strict';
 
-var CommandChain = function() {
+var CommandChain = function(executeHandler) {
 	this.commands = [];
 	this.currentIndex = 0;
+	this.executeHandler = executeHandler;
 };
 
-CommandChain.prototype.append = function(command) {
+CommandChain.prototype.append = function(command, lineNumber) {
 
 	var _this = this;
 	command.next = function() {
 		_this.proceed();
 	};
 
-	this.commands.push(command);
+	this.commands.push({lineNumber:lineNumber, command:command});
 };
 
 CommandChain.prototype.proceed = function() {
@@ -114,8 +113,11 @@ CommandChain.prototype.proceed = function() {
 CommandChain.prototype.execute = function() {
 	if (this.currentIndex < this.commands.length)
 	{
-		console.log('Going to execute command ' + this.currentIndex);
-		this.commands[this.currentIndex].execute();
+		var toExecute = this.commands[this.currentIndex];
+		// Notify line number
+		this.executeHandler(toExecute.lineNumber);
+		// Execute command
+		toExecute.command.execute();
 	}
 	else
 	{
