@@ -37,7 +37,7 @@
 
   <button type="button" onclick="runPython()">Run</button> 
   
-  <div id="editor">import mygame
+<div id="editor">import mygame
 
 char = mygame.Character();
 char.moveForward(3);
@@ -95,7 +95,7 @@ function runPython() {
       Sk.commandChain.execute();
     }
     catch(e) {
-      alert(e.toString())
+      console.debug('error', e);
     }
   } 
 

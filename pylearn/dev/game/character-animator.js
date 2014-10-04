@@ -2,20 +2,21 @@
 // Character Animator
 // 
 var CharacterAnimator = function(scene, character) {
-	this._ship = character
+	this._character = character
 	this._game = scene;
 }
 
 CharacterAnimator.prototype.moveTo = function (tile, next) {
 	var actualPos = getWorldPos(tile);
-	var moveTween = this._game.add.tween(this._ship).to(actualPos, 1000);
+	var moveTween = this._game.add.tween(this._character).to(actualPos, 1000);
 	moveTween.onComplete.add(next);
 	moveTween.start();
+    this._character.animations.play('walkE');
 }
 
 CharacterAnimator.prototype.rotateTo = function(direction, next) {
 	var angle = getDirectionAngle(direction);
-	var rotateTween = this._game.add.tween(this._ship).to({rotation:angle}, 1000);
+	var rotateTween = this._game.add.tween(this._character).to({rotation:angle}, 1000);
 	rotateTween.onComplete.add(next);
 	rotateTween.start();
 }

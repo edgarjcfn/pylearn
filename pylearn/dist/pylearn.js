@@ -2,20 +2,21 @@
 // Character Animator
 // 
 var CharacterAnimator = function(scene, character) {
-	this._ship = character
+	this._character = character
 	this._game = scene;
 }
 
 CharacterAnimator.prototype.moveTo = function (tile, next) {
 	var actualPos = getWorldPos(tile);
-	var moveTween = this._game.add.tween(this._ship).to(actualPos, 1000);
+	var moveTween = this._game.add.tween(this._character).to(actualPos, 1000);
 	moveTween.onComplete.add(next);
 	moveTween.start();
+    this._character.animations.play('walkE');
 }
 
 CharacterAnimator.prototype.rotateTo = function(direction, next) {
 	var angle = getDirectionAngle(direction);
-	var rotateTween = this._game.add.tween(this._ship).to({rotation:angle}, 1000);
+	var rotateTween = this._game.add.tween(this._character).to({rotation:angle}, 1000);
 	rotateTween.onComplete.add(next);
 	rotateTween.start();
 }
@@ -212,7 +213,8 @@ var isoGroup;
 var mainChar;
 
 function preload() {
-	game.load.image('tile', 'pylearn/dev/game/assets/tile.png');
+    game.load.image('tile', 'pylearn/dev/game/assets/tile.png');
+    game.load.atlasJSONHash('knight', 'pylearn/dev/game/assets/knight.png', 'pylearn/dev/game/assets/knight.json');
 
     game.time.advancedTiming = true;
 
@@ -227,15 +229,21 @@ function preload() {
 function create() {
     // Create a group for our tiles.
     isoGroup = game.add.group();
+    mainChar = game.add.sprite(128,128,'knight');
+
+    mainChar.animations.add('walkE', Phaser.Animation.generateFrameNames('ne000', 0, 11), 30, true);
+    mainChar.animations.add('walkN', Phaser.Animation.generateFrameNames('nw000', 0, 11), 30, true);
+    mainChar.animations.add('walkS', Phaser.Animation.generateFrameNames('se000', 0, 11), 30, true);
+    mainChar.animations.add('walkW', Phaser.Animation.generateFrameNames('sw000', 0, 11), 30, true);
 
     // Let's make a load of tiles on a grid.
     spawnTiles();
 
-	characterAnimator = new CharacterAnimator(game, mainChar);
+    characterAnimator = new CharacterAnimator(game, mainChar);
 }
 
 function update() {
-	characterAnimator.update();
+    characterAnimator.update();
 }
 
 function spawnTiles() {
