@@ -4,7 +4,7 @@
 var CharacterAnimator = function(scene, character) {
 	this._sprite = character
 	this._game = scene;
-    this._direction = Direction.E;
+    this._direction = Direction.N;
 }
 
 CharacterAnimator.prototype.moveTo = function (tile, next) {

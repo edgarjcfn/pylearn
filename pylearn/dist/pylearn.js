@@ -4,7 +4,7 @@
 var CharacterAnimator = function(scene, character) {
 	this._sprite = character
 	this._game = scene;
-    this._direction = Direction.E;
+    this._direction = Direction.N;
 }
 
 CharacterAnimator.prototype.moveTo = function (tile, next) {
@@ -230,18 +230,19 @@ function preload() {
 function create() {
     // Create a group for our tiles.
     isoGroup = game.add.group();
-    mainChar = game.add.isoSprite(0,0,30,'knight',0);
+    mainChar = game.add.isoSprite(0,0,0,'knight',0);
     mainChar.anchor.set(0.5, 0.5);
 
-    mainChar.animations.add('walkE', Phaser.Animation.generateFrameNames('', 0, 11), 30, true);
-    mainChar.animations.add('walkN', Phaser.Animation.generateFrameNames('', 12, 23), 30, true);
-    mainChar.animations.add('walkS', Phaser.Animation.generateFrameNames('', 24, 35), 30, true);
-    mainChar.animations.add('walkW', Phaser.Animation.generateFrameNames('', 36, 47), 30, true);
+    mainChar.animations.add('walkN', Phaser.Animation.generateFrameNames('', 0, 11), 30, true);
+    mainChar.animations.add('walkW', Phaser.Animation.generateFrameNames('', 12, 23), 30, true);
+    mainChar.animations.add('walkE', Phaser.Animation.generateFrameNames('', 24, 35), 30, true);
+    mainChar.animations.add('walkS', Phaser.Animation.generateFrameNames('', 36, 47), 30, true);
 
 
     // Let's make a load of tiles on a grid.
     spawnTiles();
 
+    mainChar.animations.play('walkN');
     characterAnimator = new CharacterAnimator(game, mainChar);
 }
 
@@ -260,3 +261,36 @@ function spawnTiles() {
         }
     }
 }
+"use strict";
+
+var LevelLoader = function()
+{
+	// this.isoGroup = null;
+}
+
+LevelLoader.prototype.preload = function() {
+	game.load.image('tile', 'pylearn/dev/game/assets/tile.png');
+}
+
+LevelLoader.prototype.create = function() {
+	this.isoGroup = game.add.group();
+	this.spawnTiles();
+
+}
+
+LevelLoader.prototype.update = function() {
+
+}
+
+LevelLoader.prototype.spawnTiles = function() {
+    var tile;
+    for (var xx = 0; xx < 256; xx += 64) {
+        for (var yy = 0; yy < 256; yy += 64) {
+            // Create a tile using the new game.add.isoSprite factory method at the specified position.
+            // The last parameter is the group you want to add it to (just like game.add.sprite)
+            tile = game.add.isoSprite(xx, yy, 0, 'tile', 0, isoGroup);
+            tile.anchor.set(0.5, 0);
+        }
+    }
+}
+
