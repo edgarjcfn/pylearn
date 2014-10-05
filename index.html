@@ -40,6 +40,10 @@
 <div id="editor">import mygame
 
 char = mygame.Character();
+
+"""
+" Do a square lap
+"""
 char.turnRight();
 char.moveForward(3);
 char.turnRight();
@@ -48,6 +52,16 @@ char.turnRight();
 char.moveForward(3);
 char.turnRight();
 char.moveForward(3);
+
+"""
+" Do a Zig-Zag
+"""
+char.turnRight();
+for x in range(0,3):
+    char.moveForward(1);
+    char.turnRight();
+    char.moveForward(1);
+    char.turnLeft();
 
   </div><br /> 
 
