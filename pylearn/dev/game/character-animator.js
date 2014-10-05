@@ -2,23 +2,24 @@
 // Character Animator
 // 
 var CharacterAnimator = function(scene, character) {
-	this._character = character
+	this._sprite = character
 	this._game = scene;
+    this._direction = Direction.E;
 }
 
 CharacterAnimator.prototype.moveTo = function (tile, next) {
-	var actualPos = getWorldPos(tile);
-	var moveTween = this._game.add.tween(this._character).to(actualPos, 1000);
+	var actualPos = getIsoPos(tile);
+	var moveTween = this._game.add.tween(this._sprite).to(actualPos, 1000);
 	moveTween.onComplete.add(next);
 	moveTween.start();
-    this._character.animations.play('walkE');
+    var animation = 'walk'+ this._direction;
+    console.log(animation)
+    this._sprite.animations.play(animation);
 }
 
 CharacterAnimator.prototype.rotateTo = function(direction, next) {
-	var angle = getDirectionAngle(direction);
-	var rotateTween = this._game.add.tween(this._character).to({rotation:angle}, 1000);
-	rotateTween.onComplete.add(next);
-	rotateTween.start();
+	this._direction = direction;
+    next();
 }
 
 CharacterAnimator.prototype.update = function(sprite) {
@@ -44,9 +45,9 @@ function getDirectionAngle(dir) {
     return 0;
 }
 
-function getWorldPos(tilePos) {
+function getIsoPos(tilePos) {
     return {
-        'x' : 350 + (tilePos.x * 30), 
-        'y' : 300 + (tilePos.y * 30)
+        'isoX' : tilePos.x * 64, 
+        'isoY' : tilePos.y * 64
     };
 }

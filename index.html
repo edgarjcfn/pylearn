@@ -5,8 +5,8 @@
   <script src="bower_components/skulpt/skulpt.min.js" type="text/javascript"></script> 
   <script src="bower_components/skulpt/skulpt-stdlib.js" type="text/javascript"></script> 
   <script src="bower_components/ace-builds/src-min/ace.js"></script>
-  <script src="bower_components/phaser/build/phaser.min.js"></script>
-  <script src="bower_components/phaser-plugin-isometric/dist/phaser-plugin-isometric.min.js"></script>
+  <script src="bower_components/phaser/build/phaser.js"></script>
+  <script src="bower_components/phaser-plugin-isometric/dist/phaser-plugin-isometric.js"></script>
 
   <script src="pylearn/dist/pylearn.js"></script>
 
@@ -40,13 +40,14 @@
 <div id="editor">import mygame
 
 char = mygame.Character();
+char.turnRight();
 char.moveForward(3);
-char.turnLeft();
-char.moveForward(5);
-char.turnLeft();
-char.moveForward(7);
-char.turnLeft();
-char.moveForward(9);
+char.turnRight();
+char.moveForward(3);
+char.turnRight();
+char.moveForward(3);
+char.turnRight();
+char.moveForward(3);
 
   </div><br /> 
 
@@ -95,7 +96,8 @@ function runPython() {
       Sk.commandChain.execute();
     }
     catch(e) {
-      console.debug('error', e);
+      //console.debug('error', e);
+      throw e
     }
   } 
 

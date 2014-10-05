@@ -2,23 +2,24 @@
 // Character Animator
 // 
 var CharacterAnimator = function(scene, character) {
-	this._character = character
+	this._sprite = character
 	this._game = scene;
+    this._direction = Direction.E;
 }
 
 CharacterAnimator.prototype.moveTo = function (tile, next) {
-	var actualPos = getWorldPos(tile);
-	var moveTween = this._game.add.tween(this._character).to(actualPos, 1000);
+	var actualPos = getIsoPos(tile);
+	var moveTween = this._game.add.tween(this._sprite).to(actualPos, 1000);
 	moveTween.onComplete.add(next);
 	moveTween.start();
-    this._character.animations.play('walkE');
+    var animation = 'walk'+ this._direction;
+    console.log(animation)
+    this._sprite.animations.play(animation);
 }
 
 CharacterAnimator.prototype.rotateTo = function(direction, next) {
-	var angle = getDirectionAngle(direction);
-	var rotateTween = this._game.add.tween(this._character).to({rotation:angle}, 1000);
-	rotateTween.onComplete.add(next);
-	rotateTween.start();
+	this._direction = direction;
+    next();
 }
 
 CharacterAnimator.prototype.update = function(sprite) {
@@ -44,10 +45,10 @@ function getDirectionAngle(dir) {
     return 0;
 }
 
-function getWorldPos(tilePos) {
+function getIsoPos(tilePos) {
     return {
-        'x' : 350 + (tilePos.x * 30), 
-        'y' : 300 + (tilePos.y * 30)
+        'isoX' : tilePos.x * 64, 
+        'isoY' : tilePos.y * 64
     };
 }
 'use strict'; 
@@ -229,12 +230,14 @@ function preload() {
 function create() {
     // Create a group for our tiles.
     isoGroup = game.add.group();
-    mainChar = game.add.sprite(128,128,'knight');
+    mainChar = game.add.isoSprite(0,0,30,'knight',0);
+    mainChar.anchor.set(0.5, 0.5);
 
-    mainChar.animations.add('walkE', Phaser.Animation.generateFrameNames('ne000', 0, 11), 30, true);
-    mainChar.animations.add('walkN', Phaser.Animation.generateFrameNames('nw000', 0, 11), 30, true);
-    mainChar.animations.add('walkS', Phaser.Animation.generateFrameNames('se000', 0, 11), 30, true);
-    mainChar.animations.add('walkW', Phaser.Animation.generateFrameNames('sw000', 0, 11), 30, true);
+    mainChar.animations.add('walkE', Phaser.Animation.generateFrameNames('', 0, 11), 30, true);
+    mainChar.animations.add('walkN', Phaser.Animation.generateFrameNames('', 12, 23), 30, true);
+    mainChar.animations.add('walkS', Phaser.Animation.generateFrameNames('', 24, 35), 30, true);
+    mainChar.animations.add('walkW', Phaser.Animation.generateFrameNames('', 36, 47), 30, true);
+
 
     // Let's make a load of tiles on a grid.
     spawnTiles();

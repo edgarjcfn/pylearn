@@ -21,12 +21,14 @@ function preload() {
 function create() {
     // Create a group for our tiles.
     isoGroup = game.add.group();
-    mainChar = game.add.sprite(128,128,'knight');
+    mainChar = game.add.isoSprite(0,0,30,'knight',0);
+    mainChar.anchor.set(0.5, 0.5);
 
-    mainChar.animations.add('walkE', Phaser.Animation.generateFrameNames('ne000', 0, 11), 30, true);
-    mainChar.animations.add('walkN', Phaser.Animation.generateFrameNames('nw000', 0, 11), 30, true);
-    mainChar.animations.add('walkS', Phaser.Animation.generateFrameNames('se000', 0, 11), 30, true);
-    mainChar.animations.add('walkW', Phaser.Animation.generateFrameNames('sw000', 0, 11), 30, true);
+    mainChar.animations.add('walkE', Phaser.Animation.generateFrameNames('', 0, 11), 30, true);
+    mainChar.animations.add('walkN', Phaser.Animation.generateFrameNames('', 12, 23), 30, true);
+    mainChar.animations.add('walkS', Phaser.Animation.generateFrameNames('', 24, 35), 30, true);
+    mainChar.animations.add('walkW', Phaser.Animation.generateFrameNames('', 36, 47), 30, true);
+
 
     // Let's make a load of tiles on a grid.
     spawnTiles();
