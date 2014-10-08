@@ -258,11 +258,16 @@ function create() {
     mainChar.animations.add('attackE', Phaser.Animation.generateFrameNames('', 26, 38), 24, false);
     mainChar.animations.add('attackS', Phaser.Animation.generateFrameNames('', 39, 51), 24, false);
 
+    mainChar.animations.add('idleN', [12], 24,  false);
+    mainChar.animations.add('idleW', [25], 24, false);
+    mainChar.animations.add('idleE', [38], 24, false);
+    mainChar.animations.add('idleS', [51], 24, false);
+
 
     // Let's make a load of tiles on a grid.
     spawnTiles();
 
-    mainChar.animations.play('walkN');
+    mainChar.animations.play('idleN');
     characterAnimator = new CharacterAnimator(game, mainChar);
 }
 
