@@ -8,10 +8,11 @@ var CommandChain = function(executeHandler) {
 
 CommandChain.prototype.append = function(command, lineNumber) {
 
-	var _this = this;
-	command.next = function() {
-		_this.proceed();
-	};
+	// var _this = this;
+	// command.next = function() {
+		// _this.proceed();
+	// };
+	command.next = this.proceed.bind(this); 
 
 	this.commands.push({lineNumber:lineNumber, command:command});
 };

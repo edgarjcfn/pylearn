@@ -99,10 +99,11 @@ var CommandChain = function(executeHandler) {
 
 CommandChain.prototype.append = function(command, lineNumber) {
 
-	var _this = this;
-	command.next = function() {
-		_this.proceed();
-	};
+	// var _this = this;
+	// command.next = function() {
+		// _this.proceed();
+	// };
+	command.next = this.proceed.bind(this); 
 
 	this.commands.push({lineNumber:lineNumber, command:command});
 };
@@ -215,7 +216,7 @@ var mainChar;
 
 function preload() {
     game.load.image('tile', 'pylearn/dev/game/assets/tile.png');
-    game.load.atlasJSONHash('knight', 'pylearn/dev/game/assets/knight.png', 'pylearn/dev/game/assets/knight.json');
+    game.load.atlasJSONHash('pirate', 'pylearn/dev/game/assets/pirate.png', 'pylearn/dev/game/assets/pirate.json');
 
     game.time.advancedTiming = true;
 
@@ -230,13 +231,13 @@ function preload() {
 function create() {
     // Create a group for our tiles.
     isoGroup = game.add.group();
-    mainChar = game.add.isoSprite(0,0,0,'knight',0);
+    mainChar = game.add.isoSprite(0,0,0,'pirate',0);
     mainChar.anchor.set(0.5, 0.5);
 
-    mainChar.animations.add('walkN', Phaser.Animation.generateFrameNames('', 0, 11), 30, true);
-    mainChar.animations.add('walkW', Phaser.Animation.generateFrameNames('', 12, 23), 30, true);
-    mainChar.animations.add('walkE', Phaser.Animation.generateFrameNames('', 24, 35), 30, true);
-    mainChar.animations.add('walkS', Phaser.Animation.generateFrameNames('', 36, 47), 30, true);
+    mainChar.animations.add('walkN', Phaser.Animation.generateFrameNames('', 52, 60), 24, true);
+    mainChar.animations.add('walkW', Phaser.Animation.generateFrameNames('', 61, 69), 24, true);
+    mainChar.animations.add('walkE', Phaser.Animation.generateFrameNames('', 70, 78), 24, true);
+    mainChar.animations.add('walkS', Phaser.Animation.generateFrameNames('', 79, 87), 24, true);
 
 
     // Let's make a load of tiles on a grid.
