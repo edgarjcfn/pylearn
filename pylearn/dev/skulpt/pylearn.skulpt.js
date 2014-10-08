@@ -34,6 +34,10 @@ var $builtinmodule = function(name)
             var turnCmd = new TurnRightCommand(self.character, Sk.animator);
             Sk.commandChain.append(turnCmd, Sk.currLineNo);
          });
+         $loc.attack = new Sk.builtin.func(function(self) {
+            var attackCmd = new AttackCommand(self.character, Sk.animator);
+            Sk.commandChain.append(attackCmd, Sk.currLineNo);
+         });
          $loc.position = new Sk.builtin.func(function(self) {
             var pos = self.character.position();
 

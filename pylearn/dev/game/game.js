@@ -29,6 +29,11 @@ function create() {
     mainChar.animations.add('walkE', Phaser.Animation.generateFrameNames('', 70, 78), 24, true);
     mainChar.animations.add('walkS', Phaser.Animation.generateFrameNames('', 79, 87), 24, true);
 
+    mainChar.animations.add('attackN', Phaser.Animation.generateFrameNames('', 0, 12), 24,  false);
+    mainChar.animations.add('attackW', Phaser.Animation.generateFrameNames('', 13, 25), 24, false);
+    mainChar.animations.add('attackE', Phaser.Animation.generateFrameNames('', 26, 38), 24, false);
+    mainChar.animations.add('attackS', Phaser.Animation.generateFrameNames('', 39, 51), 24, false);
+
 
     // Let's make a load of tiles on a grid.
     spawnTiles();

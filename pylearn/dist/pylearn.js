@@ -13,13 +13,19 @@ CharacterAnimator.prototype.moveTo = function (tile, next) {
 	moveTween.onComplete.add(next);
 	moveTween.start();
     var animation = 'walk'+ this._direction;
-    console.log(animation)
     this._sprite.animations.play(animation);
 }
 
 CharacterAnimator.prototype.rotateTo = function(direction, next) {
 	this._direction = direction;
     next();
+}
+
+CharacterAnimator.prototype.attack = function(next) {
+    var animName = 'attack'+this._direction;
+    var animation = this._sprite.animations.play(animName);
+    console.debug(animation);
+    animation.onComplete.add(next);
 }
 
 CharacterAnimator.prototype.update = function(sprite) {
@@ -207,6 +213,14 @@ var TurnRightCommand = function(character, animator) {
 	}
 }
 
+var AttackCommand = function(character, animator) {
+	this.next = null;
+
+	this.execute = function() {
+		animator.attack(this.next);
+	}
+}
+
 
 var game = new Phaser.Game(800, 600, Phaser.AUTO, 'gameCanvas', { preload: preload, create: create, update: update });
 
@@ -238,6 +252,11 @@ function create() {
     mainChar.animations.add('walkW', Phaser.Animation.generateFrameNames('', 61, 69), 24, true);
     mainChar.animations.add('walkE', Phaser.Animation.generateFrameNames('', 70, 78), 24, true);
     mainChar.animations.add('walkS', Phaser.Animation.generateFrameNames('', 79, 87), 24, true);
+
+    mainChar.animations.add('attackN', Phaser.Animation.generateFrameNames('', 0, 12), 24,  false);
+    mainChar.animations.add('attackW', Phaser.Animation.generateFrameNames('', 13, 25), 24, false);
+    mainChar.animations.add('attackE', Phaser.Animation.generateFrameNames('', 26, 38), 24, false);
+    mainChar.animations.add('attackS', Phaser.Animation.generateFrameNames('', 39, 51), 24, false);
 
 
     // Let's make a load of tiles on a grid.

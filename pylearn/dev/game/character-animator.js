@@ -13,13 +13,19 @@ CharacterAnimator.prototype.moveTo = function (tile, next) {
 	moveTween.onComplete.add(next);
 	moveTween.start();
     var animation = 'walk'+ this._direction;
-    console.log(animation)
     this._sprite.animations.play(animation);
 }
 
 CharacterAnimator.prototype.rotateTo = function(direction, next) {
 	this._direction = direction;
     next();
+}
+
+CharacterAnimator.prototype.attack = function(next) {
+    var animName = 'attack'+this._direction;
+    var animation = this._sprite.animations.play(animName);
+    console.debug(animation);
+    animation.onComplete.add(next);
 }
 
 CharacterAnimator.prototype.update = function(sprite) {

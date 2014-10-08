@@ -74,3 +74,11 @@ var TurnRightCommand = function(character, animator) {
 	}
 }
 
+var AttackCommand = function(character, animator) {
+	this.next = null;
+
+	this.execute = function() {
+		animator.attack(this.next);
+	}
+}
+
