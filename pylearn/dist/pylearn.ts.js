@@ -27,13 +27,26 @@ var Pylearn;
 })(Pylearn || (Pylearn = {}));
 var Pylearn;
 (function (Pylearn) {
+    var Character = (function (_super) {
+        __extends(Character, _super);
+        function Character(game, x, y) {
+            _super.call(this, game, x, y, 'pirate', 0);
+        }
+        Character.prototype.create = function () {
+        };
+        return Character;
+    })(Phaser.Sprite);
+    Pylearn.Character = Character;
+})(Pylearn || (Pylearn = {}));
+var Pylearn;
+(function (Pylearn) {
     var Game = (function (_super) {
         __extends(Game, _super);
         function Game() {
             _super.call(this, 700, 600, Phaser.AUTO, 'gameCanvas', null);
             this.state.add('Boot', Pylearn.Boot, false);
             this.state.add('Preloader', Pylearn.Preloader, false);
-            this.state.add('Level1', Pylearn.Level1, false);
+            this.state.add('Gameplay', Pylearn.Gameplay, false);
             this.state.start('Boot');
         }
         return Game;
@@ -45,14 +58,40 @@ window.onload = function () {
 };
 var Pylearn;
 (function (Pylearn) {
-    var Level1 = (function (_super) {
-        __extends(Level1, _super);
-        function Level1() {
+    var Gameplay = (function (_super) {
+        __extends(Gameplay, _super);
+        function Gameplay() {
             _super.apply(this, arguments);
         }
-        return Level1;
+        Gameplay.prototype.create = function () {
+            this.character = new Pylearn.Character(this.game, 0, 0);
+            this.character.create();
+            this.level = new Pylearn.Level(this.game);
+            this.level.create();
+        };
+        return Gameplay;
     })(Phaser.State);
-    Pylearn.Level1 = Level1;
+    Pylearn.Gameplay = Gameplay;
+})(Pylearn || (Pylearn = {}));
+var Pylearn;
+(function (Pylearn) {
+    var Level = (function () {
+        function Level(game) {
+            this.game = game;
+        }
+        Level.prototype.create = function () {
+            var tile;
+            var isoGroup = this.game.add.group();
+            for (var xx = 0; xx < 256; xx += 64) {
+                for (var yy = 0; yy < 256; yy += 64) {
+                    tile = this.game.add.isoSprite(xx, yy, 0, 'tile', 0, isoGroup);
+                    tile.anchor.set(0.5, 0);
+                }
+            }
+        };
+        return Level;
+    })();
+    Pylearn.Level = Level;
 })(Pylearn || (Pylearn = {}));
 var Pylearn;
 (function (Pylearn) {
@@ -72,7 +111,7 @@ var Pylearn;
             tween.onComplete.add(this.startGame, this);
         };
         Preloader.prototype.startGame = function () {
-            this.game.state.start('Level1', true, false);
+            this.game.state.start('Gameplay', true, false);
         };
         return Preloader;
     })(Phaser.State);

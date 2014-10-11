@@ -8,14 +8,14 @@ function preload() {
     // game.load.image('tile', 'pylearn/dev/game/assets/tile.png');
     // game.load.atlasJSONHash('pirate', 'pylearn/dev/game/assets/pirate.png', 'pylearn/dev/game/assets/pirate.json');
 
-    game.time.advancedTiming = true;
+    // game.time.advancedTiming = true;
 
     // Add and enable the plug-in.
-    game.plugins.add(new Phaser.Plugin.Isometric(game));
+    // game.plugins.add(new Phaser.Plugin.Isometric(game));
 
     // This is used to set a game canvas-based offset for the 0, 0, 0 isometric coordinate - by default
     // this point would be at screen coordinates 0, 0 (top left) which is usually undesirable.
-    game.iso.anchor.setTo(0.5, 0.2);
+    // game.iso.anchor.setTo(0.5, 0.2);
 }
 
 function create() {

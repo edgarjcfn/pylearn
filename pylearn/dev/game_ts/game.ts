@@ -7,7 +7,7 @@ module Pylearn {
 
             this.state.add('Boot', Boot, false);
             this.state.add('Preloader', Preloader, false);
-            this.state.add('Level1', Level1, false);
+            this.state.add('Gameplay', Gameplay, false);
 
             this.state.start('Boot');
         }

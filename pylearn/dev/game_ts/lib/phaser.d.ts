@@ -2246,6 +2246,9 @@ declare module Phaser {
         tileSprite(x: number, y: number, width: number, height: number, key?: any, frame?: any, group?: Phaser.Group): Phaser.TileSprite;
         tween(obj: any): Phaser.Tween;
 
+        //Isometric Plugin
+        isoSprite(x:number, y:number, z:number, key:any, frame?:any, group?:Phaser.Group): Phaser.Sprite;
+
     }
 
     class Gamepad {
