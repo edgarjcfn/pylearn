@@ -1,7 +1,7 @@
-/// <reference path="../../../bower_components/phaser/build/phaser.d.ts" />
-
 module Pylearn {
     export class Game extends Phaser.Game {
+        iso : Phaser.Plugin.Isometric;
+        
         constructor() {
             super(700, 600, Phaser.AUTO, 'gameCanvas', null);
 
@@ -14,3 +14,7 @@ module Pylearn {
         
     }
 }   
+
+window.onload = () =>  {
+    var game = new Pylearn.Game();
+}

@@ -16,8 +16,9 @@ var Pylearn;
         };
         Boot.prototype.create = function () {
             this.game.time.advancedTiming = true;
-            this.game.plugins.add(new Phaser.Plugin.Isometric(game));
-            this.game.iso.anchor.setTo(0.5, 0.2);
+            var isoPlugin = new Phaser.Plugin.Isometric(this.game, this.game.plugins);
+            isoPlugin.anchor = new Phaser.Point(0.5, 0.2);
+            this.game.plugins.add(isoPlugin);
             this.game.state.start('Preloader', true, false);
         };
         return Boot;

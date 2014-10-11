@@ -12,7 +12,7 @@ var Pylearn;
             _super.call(this, 700, 600, Phaser.AUTO, 'gameCanvas', null);
             this.state.add('Boot', Pylearn.Boot, false);
             this.state.add('Preloader', Pylearn.Preloader, false);
-            this.state.add('Level1', Level1, false);
+            this.state.add('Level1', Pylearn.Level1, false);
             this.state.start('Boot');
         }
         return Game;
