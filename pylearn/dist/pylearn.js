@@ -229,8 +229,8 @@ var isoGroup;
 var mainChar;
 
 function preload() {
-    game.load.image('tile', 'pylearn/dev/game/assets/tile.png');
-    game.load.atlasJSONHash('pirate', 'pylearn/dev/game/assets/pirate.png', 'pylearn/dev/game/assets/pirate.json');
+    // game.load.image('tile', 'pylearn/dev/game/assets/tile.png');
+    // game.load.atlasJSONHash('pirate', 'pylearn/dev/game/assets/pirate.png', 'pylearn/dev/game/assets/pirate.json');
 
     game.time.advancedTiming = true;
 
