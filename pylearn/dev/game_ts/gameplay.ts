@@ -1,14 +1,17 @@
 module Pylearn {
     export class Gameplay extends Phaser.State {
-    	character:Pylearn.Character;
-    	level:Pylearn.Level;
+        character : Pylearn.Controller.CharacterController;
+        level : Pylearn.Controller.LevelController;
 
-    	create() {
-    		this.character = new Pylearn.Character(this.game, 0, 0);
-    		this.character.create();
-    		
-    		this.level = new Pylearn.Level(this.game);
-    		this.level.create();
-    	}
+        create() {
+
+            var pirate = new Pylearn.Model.Character(0, 0, Pylearn.Model.Direction.N);
+            this.level = new Pylearn.Controller.LevelController(this.game);
+            this.character = new Pylearn.Controller.CharacterController(<Pylearn.Game> this.game, pirate);
+
+            this.level.create();
+            this.character.create();
+
+        }
     }
 }

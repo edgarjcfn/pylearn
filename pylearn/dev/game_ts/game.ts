@@ -1,7 +1,5 @@
 module Pylearn {
     export class Game extends Phaser.Game {
-        iso : Phaser.Plugin.Isometric;
-        
         constructor() {
             super(700, 600, Phaser.AUTO, 'gameCanvas', null);
 

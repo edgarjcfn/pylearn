@@ -1,5 +1,5 @@
-module Pylearn {
-    export class Level {
+module Pylearn.Controller {
+    export class LevelController {
 
         game:Phaser.Game;
 

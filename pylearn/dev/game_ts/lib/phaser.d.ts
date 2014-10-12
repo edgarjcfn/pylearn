@@ -2167,6 +2167,8 @@ declare module Phaser {
         tweens: Phaser.TweenManager;
         width: number;
         world: Phaser.World;
+        // Isometric Plugin
+        iso : Phaser.Plugin.Isometric.Projector
 
         boot(): void;
         destroy(): void;
@@ -4105,9 +4107,13 @@ declare module Phaser {
         }
 
         class Isometric extends Phaser.Plugin {
-            constructor(game: Phaser.Game, parent: any);
+            constructor(game: Phaser.Game);
+        }
 
-            anchor: Phaser.Point;
+        module Isometric {
+            class Projector {
+                anchor: Phaser.Point;
+            }
         }
 
 
