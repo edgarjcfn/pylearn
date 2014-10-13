@@ -18,7 +18,7 @@ module Pylearn.Controller {
         
         create() {
             var worldPos = this.getWorldPos(this.pirate.position);
-            this.sprite = this.game.add.isoSprite(worldPos.x, worldPos.y, 0, 'pirate', 0);
+            this.sprite = this.game.addIsoSprite(worldPos.x, worldPos.y, 0, 'pirate', 0);
             this.sprite.anchor.set(0.5, 0.5);
 
             this.sprite.animations.add('walkN', Phaser.Animation.generateFrameNames('', 52, 60), 24, true);

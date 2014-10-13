@@ -1,29 +1,3 @@
-var __extends = this.__extends || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
-var Pylearn;
-(function (Pylearn) {
-    var Boot = (function (_super) {
-        __extends(Boot, _super);
-        function Boot() {
-            _super.apply(this, arguments);
-        }
-        Boot.prototype.preload = function () {
-            this.load.image('preloadBar', 'pylearn/dev/game/assets/loader.png');
-        };
-        Boot.prototype.create = function () {
-            this.game.time.advancedTiming = true;
-            this.game.plugins.add(new Phaser.Plugin.Isometric(this.game));
-            this.game.iso.anchor.set(0.5, 0.2);
-            this.game.state.start('Preloader', true, false);
-        };
-        return Boot;
-    })(Phaser.State);
-    Pylearn.Boot = Boot;
-})(Pylearn || (Pylearn = {}));
 var Pylearn;
 (function (Pylearn) {
     var Controller;
@@ -41,7 +15,7 @@ var Pylearn;
             };
             CharacterController.prototype.create = function () {
                 var worldPos = this.getWorldPos(this.pirate.position);
-                this.sprite = this.game.add.isoSprite(worldPos.x, worldPos.y, 0, 'pirate', 0);
+                this.sprite = this.game.addIsoSprite(worldPos.x, worldPos.y, 0, 'pirate', 0);
                 this.sprite.anchor.set(0.5, 0.5);
                 this.sprite.animations.add('walkN', Phaser.Animation.generateFrameNames('', 52, 60), 24, true);
                 this.sprite.animations.add('walkW', Phaser.Animation.generateFrameNames('', 61, 69), 24, true);
@@ -75,7 +49,7 @@ var Pylearn;
                 var isoGroup = this.game.add.group();
                 for (var xx = 0; xx < 256; xx += 64) {
                     for (var yy = 0; yy < 256; yy += 64) {
-                        tile = this.game.add.isoSprite(xx, yy, 0, 'tile', 0, isoGroup);
+                        tile = this.game.addIsoSprite(xx, yy, 0, 'tile', 0, isoGroup);
                         tile.anchor.set(0.5, 0);
                     }
                 }
@@ -85,6 +59,34 @@ var Pylearn;
         Controller.LevelController = LevelController;
     })(Controller = Pylearn.Controller || (Pylearn.Controller = {}));
 })(Pylearn || (Pylearn = {}));
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+var Phaser;
+(function (Phaser) {
+    var IsoGame = (function (_super) {
+        __extends(IsoGame, _super);
+        function IsoGame(width, height, renderer, parent, state, transparent, antialias, physicsConfig) {
+            _super.call(this, width, height, renderer, parent, state, transparent, antialias, physicsConfig);
+            console.log(this);
+            console.log(this.plugins);
+            console.log(this.iso);
+            console.log(Object.getOwnPropertyNames(Phaser.Game.prototype));
+            this.plugins.add(new Phaser.Plugin.Isometric(this));
+            this.iso.anchor.set(0.5, 0.2);
+        }
+        IsoGame.prototype.addIsoSprite = function (x, y, z, key, frame, group) {
+            var isoSprite = new Phaser.Plugin.Isometric.IsoSprite(this, x, y, z);
+            var sprite = this.add.sprite(isoSprite.x, isoSprite.y, key, frame, group);
+            return sprite;
+        };
+        return IsoGame;
+    })(Phaser.Game);
+    Phaser.IsoGame = IsoGame;
+})(Phaser || (Phaser = {}));
 var Pylearn;
 (function (Pylearn) {
     var Game = (function (_super) {
@@ -97,30 +99,12 @@ var Pylearn;
             this.state.start('Boot');
         }
         return Game;
-    })(Phaser.Game);
+    })(Phaser.IsoGame);
     Pylearn.Game = Game;
 })(Pylearn || (Pylearn = {}));
 window.onload = function () {
     var game = new Pylearn.Game();
 };
-var Pylearn;
-(function (Pylearn) {
-    var Gameplay = (function (_super) {
-        __extends(Gameplay, _super);
-        function Gameplay() {
-            _super.apply(this, arguments);
-        }
-        Gameplay.prototype.create = function () {
-            var pirate = new Pylearn.Model.Character(0, 0, 0 /* N */);
-            this.level = new Pylearn.Controller.LevelController(this.game);
-            this.character = new Pylearn.Controller.CharacterController(this.game, pirate);
-            this.level.create();
-            this.character.create();
-        };
-        return Gameplay;
-    })(Phaser.State);
-    Pylearn.Gameplay = Gameplay;
-})(Pylearn || (Pylearn = {}));
 var Pylearn;
 (function (Pylearn) {
     var Model;
@@ -161,6 +145,42 @@ var Pylearn;
         })();
         Model.Level = Level;
     })(Model = Pylearn.Model || (Pylearn.Model = {}));
+})(Pylearn || (Pylearn = {}));
+var Pylearn;
+(function (Pylearn) {
+    var Boot = (function (_super) {
+        __extends(Boot, _super);
+        function Boot() {
+            _super.apply(this, arguments);
+        }
+        Boot.prototype.preload = function () {
+            this.load.image('preloadBar', 'pylearn/dev/game/assets/loader.png');
+        };
+        Boot.prototype.create = function () {
+            this.game.time.advancedTiming = true;
+            this.game.state.start('Preloader', true, false);
+        };
+        return Boot;
+    })(Phaser.State);
+    Pylearn.Boot = Boot;
+})(Pylearn || (Pylearn = {}));
+var Pylearn;
+(function (Pylearn) {
+    var Gameplay = (function (_super) {
+        __extends(Gameplay, _super);
+        function Gameplay() {
+            _super.apply(this, arguments);
+        }
+        Gameplay.prototype.create = function () {
+            var pirate = new Pylearn.Model.Character(0, 0, 0 /* N */);
+            this.level = new Pylearn.Controller.LevelController(this.game);
+            this.character = new Pylearn.Controller.CharacterController(this.game, pirate);
+            this.level.create();
+            this.character.create();
+        };
+        return Gameplay;
+    })(Phaser.State);
+    Pylearn.Gameplay = Gameplay;
 })(Pylearn || (Pylearn = {}));
 var Pylearn;
 (function (Pylearn) {
