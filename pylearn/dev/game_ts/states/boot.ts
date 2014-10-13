@@ -6,7 +6,7 @@ module Pylearn {
             this.load.image('preloadBar', 'pylearn/dev/game/assets/loader.png');
         }
  
-        create() { 
+        create() {
 
             this.game.time.advancedTiming = true;
             this.game.state.start('Preloader', true, false);

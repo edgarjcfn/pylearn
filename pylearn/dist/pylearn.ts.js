@@ -15,7 +15,7 @@ var Pylearn;
             };
             CharacterController.prototype.create = function () {
                 var worldPos = this.getWorldPos(this.pirate.position);
-                this.sprite = this.game.addIsoSprite(worldPos.x, worldPos.y, 0, 'pirate', 0);
+                this.sprite = this.game.isoPlugin.addIsoSprite(worldPos.x, worldPos.y, 0, 'pirate', 0);
                 this.sprite.anchor.set(0.5, 0.5);
                 this.sprite.animations.add('walkN', Phaser.Animation.generateFrameNames('', 52, 60), 24, true);
                 this.sprite.animations.add('walkW', Phaser.Animation.generateFrameNames('', 61, 69), 24, true);
@@ -49,7 +49,7 @@ var Pylearn;
                 var isoGroup = this.game.add.group();
                 for (var xx = 0; xx < 256; xx += 64) {
                     for (var yy = 0; yy < 256; yy += 64) {
-                        tile = this.game.addIsoSprite(xx, yy, 0, 'tile', 0, isoGroup);
+                        tile = this.game.isoPlugin.addIsoSprite(xx, yy, 0, 'tile', 0, isoGroup);
                         tile.anchor.set(0.5, 0);
                     }
                 }
@@ -65,28 +65,6 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-var Phaser;
-(function (Phaser) {
-    var IsoGame = (function (_super) {
-        __extends(IsoGame, _super);
-        function IsoGame(width, height, renderer, parent, state, transparent, antialias, physicsConfig) {
-            _super.call(this, width, height, renderer, parent, state, transparent, antialias, physicsConfig);
-            console.log(this);
-            console.log(this.plugins);
-            console.log(this.iso);
-            console.log(Object.getOwnPropertyNames(Phaser.Game.prototype));
-            this.plugins.add(new Phaser.Plugin.Isometric(this));
-            this.iso.anchor.set(0.5, 0.2);
-        }
-        IsoGame.prototype.addIsoSprite = function (x, y, z, key, frame, group) {
-            var isoSprite = new Phaser.Plugin.Isometric.IsoSprite(this, x, y, z);
-            var sprite = this.add.sprite(isoSprite.x, isoSprite.y, key, frame, group);
-            return sprite;
-        };
-        return IsoGame;
-    })(Phaser.Game);
-    Phaser.IsoGame = IsoGame;
-})(Phaser || (Phaser = {}));
 var Pylearn;
 (function (Pylearn) {
     var Game = (function (_super) {
@@ -96,10 +74,15 @@ var Pylearn;
             this.state.add('Boot', Pylearn.Boot, false);
             this.state.add('Preloader', Pylearn.Preloader, false);
             this.state.add('Gameplay', Pylearn.Gameplay, false);
-            this.state.start('Boot');
         }
+        Game.prototype.boot = function () {
+            _super.prototype.boot.call(this);
+            this.isoPlugin = this.plugins.add(new Phaser.Plugin.Isometric(this));
+            this.isoPlugin.projector.anchor.setTo(0.5, 0.2);
+            this.state.start('Boot');
+        };
         return Game;
-    })(Phaser.IsoGame);
+    })(Phaser.Game);
     Pylearn.Game = Game;
 })(Pylearn || (Pylearn = {}));
 window.onload = function () {
