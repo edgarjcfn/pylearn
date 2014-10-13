@@ -3,6 +3,7 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, 'gameCanvas', { preload: prelo
 var characterAnimator;
 var isoGroup;
 var mainChar;
+var isoPlugin;
 
 function preload() {
     game.load.image('tile', 'pylearn/dev/game/assets/tile.png');
@@ -11,17 +12,20 @@ function preload() {
     game.time.advancedTiming = true;
 
     // Add and enable the plug-in.
-    game.plugins.add(new Phaser.Plugin.Isometric(game));
-
+    isoPlugin = game.plugins.add(new Phaser.Plugin.Isometric(game));
+    // console.debug(isoPlugin);
     // This is used to set a game canvas-based offset for the 0, 0, 0 isometric coordinate - by default
     // this point would be at screen coordinates 0, 0 (top left) which is usually undesirable.
-    game.iso.anchor.setTo(0.5, 0.2);
+    isoPlugin.projector.anchor.setTo(0.5, 0.2);
+
+    console.log(isoPlugin);
+    // this.game.iso.anchor.setTo(0.5, 0.2);
 }
 
 function create() {
     // Create a group for our tiles.
     isoGroup = game.add.group();
-    mainChar = game.add.isoSprite(0,0,0,'pirate',0);
+    mainChar = isoPlugin.addIsoSprite(0,0,0,'pirate',0);
     mainChar.anchor.set(0.5, 0.5);
 
     mainChar.animations.add('walkN', Phaser.Animation.generateFrameNames('', 52, 60), 24, true);
@@ -57,7 +61,7 @@ function spawnTiles() {
         for (var yy = 0; yy < 256; yy += 64) {
             // Create a tile using the new game.add.isoSprite factory method at the specified position.
             // The last parameter is the group you want to add it to (just like game.add.sprite)
-            tile = game.add.isoSprite(xx, yy, 0, 'tile', 0, isoGroup);
+            tile = isoPlugin.addIsoSprite(xx, yy, 0, 'tile', 0, isoGroup);
             tile.anchor.set(0.5, 0);
         }
     }
