@@ -1,4 +1,5 @@
 module Pylearn {
+    declare var SkulptAnimator : Pylearn.Controller.ICharacterController;
     export class Gameplay extends Phaser.State {
         character : Pylearn.Controller.CharacterController;
         level : Pylearn.Controller.LevelController;
@@ -11,6 +12,8 @@ module Pylearn {
 
             this.level.create();
             this.character.create();
+
+            SkulptAnimator = this.character;
 
         }
     }

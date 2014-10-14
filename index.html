@@ -111,8 +111,7 @@ function runPython() {
       dependencies : []
     },
   };
-  Sk.animator = characterAnimator;
-  Sk.commandChain = new CommandChain(updateLine);
+  Sk.commandChain = new Pylearn.Command.CommandQueue(updateLine);
     // Sk.pre = "output";
     Sk.configure({read:builtinRead});
 

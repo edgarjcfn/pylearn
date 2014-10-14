@@ -1,23 +1,28 @@
 module Pylearn.Controller {
-    export class CharacterController {
-        pirate: Pylearn.Model.Character;
+    export interface ControllerDelegate {
+        ():void;
+    }
+
+    export interface ICharacterController {
+        character: Pylearn.Model.Character;
+
+        moveTo(tile: Pylearn.Model.TileCoordinate, next: ControllerDelegate) : void;
+        rotateTo(direction: Pylearn.Model.Direction, next: ControllerDelegate) : void;
+        attack(next: ControllerDelegate) : void;
+    }
+
+    export class CharacterController implements ICharacterController{
+        character: Pylearn.Model.Character;
         game: Pylearn.Game;
         sprite: Phaser.Sprite;
 
         constructor(game:Pylearn.Game, pirate:Pylearn.Model.Character) {
-            this.pirate = pirate;
+            this.character = pirate;
             this.game = game;
         }
-
-        getWorldPos(tilePos:Pylearn.Model.TileCoordinate) : Phaser.Point {
-            var isoX = tilePos.x * 64;
-            var isoY = tilePos.y * 64;
-            var isoPoint = new Phaser.Point(isoX, isoY);
-            return isoPoint;
-        } 
         
         create() {
-            var worldPos = this.getWorldPos(this.pirate.position);
+            var worldPos = Pylearn.Util.getWorldPosition(this.character.position);
             this.sprite = this.game.isoPlugin.addIsoSprite(worldPos.x, worldPos.y, 0, 'pirate', 0);
             this.sprite.anchor.set(0.5, 0.5);
 
@@ -39,5 +44,29 @@ module Pylearn.Controller {
             this.sprite.animations.play('idleN');
 
         }
+
+        moveTo(tile: Pylearn.Model.TileCoordinate, next: ControllerDelegate) : void {
+            var worldPos = Pylearn.Util.getWorldPosition(tile);
+
+            var animation = 'walk'+ this.character.direction;
+            this.sprite.animations.play(animation);
+
+            var moveTween = this.game.add.tween(this.sprite).to(worldPos, 1000);
+            moveTween.onComplete.add(next);
+            moveTween.start();
+    
+        }
+
+        rotateTo(direction: Pylearn.Model.Direction, next: ControllerDelegate) : void {
+            next();
+        }
+
+        attack(next: ControllerDelegate) : void {
+            var animationName = 'attack'+this.character.direction;
+            var animation = this.sprite.animations.play(animationName);
+            animation.onComplete.add(next);
+        }
+
+        
     } 
 }

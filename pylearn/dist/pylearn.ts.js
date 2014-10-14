@@ -1,20 +1,149 @@
 var Pylearn;
 (function (Pylearn) {
+    var Command;
+    (function (Command) {
+        var ExecutionListItem = (function () {
+            function ExecutionListItem(command, lineNumber) {
+                this.command = command;
+                this.lineNumber = lineNumber;
+            }
+            return ExecutionListItem;
+        })();
+        var CommandQueue = (function () {
+            function CommandQueue(onExecute) {
+                this.commands = [];
+                this.onExecute = onExecute;
+                this._currentIndex = 0;
+            }
+            CommandQueue.prototype.append = function (command, lineNumber) {
+                command.next = this.proceed.bind(this);
+                this.commands.push(new ExecutionListItem(command, lineNumber));
+            };
+            CommandQueue.prototype.proceed = function () {
+                this._currentIndex++;
+                this.execute();
+            };
+            CommandQueue.prototype.execute = function () {
+                if (this._currentIndex < this.commands.length) {
+                    var executionListItem = this.commands[this._currentIndex];
+                    this.onExecute(executionListItem.lineNumber);
+                    executionListItem.command.execute();
+                }
+                else {
+                    console.log('command chain finished');
+                }
+            };
+            CommandQueue.prototype.clear = function () {
+                this.commands = [];
+            };
+            return CommandQueue;
+        })();
+        Command.CommandQueue = CommandQueue;
+    })(Command = Pylearn.Command || (Pylearn.Command = {}));
+})(Pylearn || (Pylearn = {}));
+var Pylearn;
+(function (Pylearn) {
+    var Command;
+    (function (Command) {
+        var MoveCommand = (function () {
+            function MoveCommand(amount, controller) {
+                this.amount = amount;
+                this.animator = controller;
+            }
+            MoveCommand.prototype.execute = function () {
+                switch (this.animator.character.direction) {
+                    case (0 /* N */):
+                        this.animator.character.moveBy(0, -(this.amount));
+                        break;
+                    case (1 /* S */):
+                        this.animator.character.moveBy(0, (this.amount));
+                        break;
+                    case (2 /* E */):
+                        this.animator.character.moveBy((this.amount), 0);
+                        break;
+                    case (3 /* W */):
+                        this.animator.character.moveBy(-(this.amount), 0);
+                        break;
+                }
+                var newPosition = this.animator.character.position;
+                this.animator.moveTo(newPosition, this.next);
+            };
+            return MoveCommand;
+        })();
+        Command.MoveCommand = MoveCommand;
+        var TurnLeftCommand = (function () {
+            function TurnLeftCommand(controller) {
+                this.animator = controller;
+            }
+            TurnLeftCommand.prototype.execute = function () {
+                switch (this.animator.character.direction) {
+                    case (0 /* N */):
+                        this.animator.character.direction = 3 /* W */;
+                        break;
+                    case (1 /* S */):
+                        this.animator.character.direction = 2 /* E */;
+                        break;
+                    case (2 /* E */):
+                        this.animator.character.direction = 0 /* N */;
+                        break;
+                    case (3 /* W */):
+                        this.animator.character.direction = 1 /* S */;
+                        break;
+                }
+                var newDirection = this.animator.character.direction;
+                this.animator.rotateTo(newDirection, this.next);
+            };
+            return TurnLeftCommand;
+        })();
+        Command.TurnLeftCommand = TurnLeftCommand;
+        var TurnRightCommand = (function () {
+            function TurnRightCommand(controller) {
+                this.animator = controller;
+            }
+            TurnRightCommand.prototype.execute = function () {
+                switch (this.animator.character.direction) {
+                    case (0 /* N */):
+                        this.animator.character.direction = 2 /* E */;
+                        break;
+                    case (1 /* S */):
+                        this.animator.character.direction = 3 /* W */;
+                        break;
+                    case (2 /* E */):
+                        this.animator.character.direction = 1 /* S */;
+                        break;
+                    case (3 /* W */):
+                        this.animator.character.direction = 0 /* N */;
+                        break;
+                }
+                var newDirection = this.animator.character.direction;
+                this.animator.rotateTo(newDirection, this.next);
+            };
+            return TurnRightCommand;
+        })();
+        Command.TurnRightCommand = TurnRightCommand;
+        var AttackCommand = (function () {
+            function AttackCommand(controller) {
+                this.animator = controller;
+            }
+            AttackCommand.prototype.execute = function () {
+                this.animator.attack(this.next);
+            };
+            return AttackCommand;
+        })();
+        Command.AttackCommand = AttackCommand;
+    })(Command = Pylearn.Command || (Pylearn.Command = {}));
+})(Pylearn || (Pylearn = {}));
+var Pylearn;
+(function (Pylearn) {
     var Controller;
     (function (Controller) {
         var CharacterController = (function () {
             function CharacterController(game, pirate) {
-                this.pirate = pirate;
+                this.character = pirate;
                 this.game = game;
             }
-            CharacterController.prototype.getWorldPos = function (tilePos) {
-                var isoX = tilePos.x * 64;
-                var isoY = tilePos.y * 64;
-                var isoPoint = new Phaser.Point(isoX, isoY);
-                return isoPoint;
-            };
             CharacterController.prototype.create = function () {
-                var worldPos = this.getWorldPos(this.pirate.position);
+                var worldPos = Pylearn.Util.getWorldPosition(this.character.position);
                 this.sprite = this.game.isoPlugin.addIsoSprite(worldPos.x, worldPos.y, 0, 'pirate', 0);
                 this.sprite.anchor.set(0.5, 0.5);
                 this.sprite.animations.add('walkN', Phaser.Animation.generateFrameNames('', 52, 60), 24, true);
@@ -30,6 +159,22 @@ var Pylearn;
                 this.sprite.animations.add('idleE', [38], 24, false);
                 this.sprite.animations.add('idleS', [51], 24, false);
                 this.sprite.animations.play('idleN');
+            };
+            CharacterController.prototype.moveTo = function (tile, next) {
+                var worldPos = Pylearn.Util.getWorldPosition(tile);
+                var animation = 'walk' + this.character.direction;
+                this.sprite.animations.play(animation);
+                var moveTween = this.game.add.tween(this.sprite).to(worldPos, 1000);
+                moveTween.onComplete.add(next);
+                moveTween.start();
+            };
+            CharacterController.prototype.rotateTo = function (direction, next) {
+                next();
+            };
+            CharacterController.prototype.attack = function (next) {
+                var animationName = 'attack' + this.character.direction;
+                var animation = this.sprite.animations.play(animationName);
+                animation.onComplete.add(next);
             };
             return CharacterController;
         })();
@@ -99,19 +244,15 @@ var Pylearn;
             Direction[Direction["W"] = 3] = "W";
         })(Model.Direction || (Model.Direction = {}));
         var Direction = Model.Direction;
-        var TileCoordinate = (function () {
-            function TileCoordinate(x, y) {
-                this.x = x;
-                this.y = y;
-            }
-            return TileCoordinate;
-        })();
-        Model.TileCoordinate = TileCoordinate;
         var Character = (function () {
             function Character(x, y, direction) {
-                this.position = new TileCoordinate(x, y);
+                this.position = new Model.TileCoordinate(x, y);
                 this.direction = direction;
             }
+            Character.prototype.moveBy = function (x, y) {
+                this.position.x += x;
+                this.position.y += y;
+            };
             return Character;
         })();
         Model.Character = Character;
@@ -127,6 +268,20 @@ var Pylearn;
             return Level;
         })();
         Model.Level = Level;
+    })(Model = Pylearn.Model || (Pylearn.Model = {}));
+})(Pylearn || (Pylearn = {}));
+var Pylearn;
+(function (Pylearn) {
+    var Model;
+    (function (Model) {
+        var TileCoordinate = (function () {
+            function TileCoordinate(x, y) {
+                this.x = x;
+                this.y = y;
+            }
+            return TileCoordinate;
+        })();
+        Model.TileCoordinate = TileCoordinate;
     })(Model = Pylearn.Model || (Pylearn.Model = {}));
 })(Pylearn || (Pylearn = {}));
 var Pylearn;
@@ -160,6 +315,7 @@ var Pylearn;
             this.character = new Pylearn.Controller.CharacterController(this.game, pirate);
             this.level.create();
             this.character.create();
+            SkulptAnimator = this.character;
         };
         return Gameplay;
     })(Phaser.State);
@@ -188,5 +344,29 @@ var Pylearn;
         return Preloader;
     })(Phaser.State);
     Pylearn.Preloader = Preloader;
+})(Pylearn || (Pylearn = {}));
+var Pylearn;
+(function (Pylearn) {
+    var Util = (function () {
+        function Util() {
+        }
+        Util.getDirectionAngle = function (direction) {
+            switch (direction) {
+                case 0 /* N */:
+                    return 0;
+                case 2 /* E */:
+                    return Math.PI / 2;
+                case 1 /* S */:
+                    return Math.PI;
+                case 3 /* W */:
+                    return 3 * (Math.PI / 2);
+            }
+        };
+        Util.getWorldPosition = function (tile) {
+            return new Phaser.Point(tile.x * 64, tile.y * 64);
+        };
+        return Util;
+    })();
+    Pylearn.Util = Util;
 })(Pylearn || (Pylearn = {}));
 //# sourceMappingURL=pylearn.ts.js.map
