@@ -5,9 +5,18 @@ A game to learn python by typing into a browser-based interpreter
 
 # this is a work in progress
 
-Current version uses
+## Current version uses
  - [Skulpt](http://skulpt.org) - Browser-based python compiler and interpreter
- - [Wade](http://www.clockworkchilli.com/index.php/developers) - HTML5 game framework.
+ - [Phaser](httpL//phaser.io) - HTML5 game framework.
+ - [Phaser Isometric Plugin](https://github.com/lewster32/phaser-plugin-isometric) - By @lewster32
+ - [Ace](http://ace.c9.io/) - In-browse code editor
+ - Tiles from [OpenGameArt.Org](http://opengameart.org/content/isometric-painted-game-assets)
+ - Character Sprites from [Rener's Tile Sets](http://www.reinerstilesets.de)
 
-current version is a proof-of-concept. 
-will evolve it to a proper game when I have time.
+## TODO 
+ - [ ] Migrate to Typescript
+ - [ ] Implement Level Loading
+ - [ ] Implement Level Progression (instructions, win/lose)
+ - [ ] Add more scenes (preloading, main menu, level select, etc)
+ - [ ] Add tutorials
+ - [ ] Add proper nice/matching graphics
