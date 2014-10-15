@@ -55,10 +55,10 @@ var Pylearn;
                     case (0 /* N */):
                         this.animator.character.moveBy(0, -(this.amount));
                         break;
-                    case (1 /* S */):
+                    case (2 /* S */):
                         this.animator.character.moveBy(0, (this.amount));
                         break;
-                    case (2 /* E */):
+                    case (1 /* E */):
                         this.animator.character.moveBy((this.amount), 0);
                         break;
                     case (3 /* W */):
@@ -80,14 +80,14 @@ var Pylearn;
                     case (0 /* N */):
                         this.animator.character.direction = 3 /* W */;
                         break;
-                    case (1 /* S */):
-                        this.animator.character.direction = 2 /* E */;
+                    case (2 /* S */):
+                        this.animator.character.direction = 1 /* E */;
                         break;
-                    case (2 /* E */):
+                    case (1 /* E */):
                         this.animator.character.direction = 0 /* N */;
                         break;
                     case (3 /* W */):
-                        this.animator.character.direction = 1 /* S */;
+                        this.animator.character.direction = 2 /* S */;
                         break;
                 }
                 var newDirection = this.animator.character.direction;
@@ -103,13 +103,13 @@ var Pylearn;
             TurnRightCommand.prototype.execute = function () {
                 switch (this.animator.character.direction) {
                     case (0 /* N */):
-                        this.animator.character.direction = 2 /* E */;
+                        this.animator.character.direction = 1 /* E */;
                         break;
-                    case (1 /* S */):
+                    case (2 /* S */):
                         this.animator.character.direction = 3 /* W */;
                         break;
-                    case (2 /* E */):
-                        this.animator.character.direction = 1 /* S */;
+                    case (1 /* E */):
+                        this.animator.character.direction = 2 /* S */;
                         break;
                     case (3 /* W */):
                         this.animator.character.direction = 0 /* N */;
@@ -146,34 +146,38 @@ var Pylearn;
                 var worldPos = Pylearn.Util.getWorldPosition(this.character.position);
                 this.sprite = this.game.isoPlugin.addIsoSprite(worldPos.x, worldPos.y, 0, 'pirate', 0);
                 this.sprite.anchor.set(0.5, 0.5);
-                this.sprite.animations.add('walkN', Phaser.Animation.generateFrameNames('', 52, 60), 24, true);
-                this.sprite.animations.add('walkW', Phaser.Animation.generateFrameNames('', 61, 69), 24, true);
-                this.sprite.animations.add('walkE', Phaser.Animation.generateFrameNames('', 70, 78), 24, true);
-                this.sprite.animations.add('walkS', Phaser.Animation.generateFrameNames('', 79, 87), 24, true);
-                this.sprite.animations.add('attackN', Phaser.Animation.generateFrameNames('', 0, 12), 24, false);
-                this.sprite.animations.add('attackW', Phaser.Animation.generateFrameNames('', 13, 25), 24, false);
-                this.sprite.animations.add('attackE', Phaser.Animation.generateFrameNames('', 26, 38), 24, false);
-                this.sprite.animations.add('attackS', Phaser.Animation.generateFrameNames('', 39, 51), 24, false);
-                this.sprite.animations.add('idleN', [12], 24, false);
-                this.sprite.animations.add('idleW', [25], 24, false);
-                this.sprite.animations.add('idleE', [38], 24, false);
-                this.sprite.animations.add('idleS', [51], 24, false);
-                this.sprite.animations.play('idleN');
+                this.sprite.animations.add('walk0', Phaser.Animation.generateFrameNames('', 52, 60), 24, true);
+                this.sprite.animations.add('walk3', Phaser.Animation.generateFrameNames('', 61, 69), 24, true);
+                this.sprite.animations.add('walk1', Phaser.Animation.generateFrameNames('', 70, 78), 24, true);
+                this.sprite.animations.add('walk2', Phaser.Animation.generateFrameNames('', 79, 87), 24, true);
+                this.sprite.animations.add('attack0', Phaser.Animation.generateFrameNames('', 0, 12), 24, false);
+                this.sprite.animations.add('attack3', Phaser.Animation.generateFrameNames('', 13, 25), 24, false);
+                this.sprite.animations.add('attack1', Phaser.Animation.generateFrameNames('', 26, 38), 24, false);
+                this.sprite.animations.add('attack2', Phaser.Animation.generateFrameNames('', 39, 51), 24, false);
+                this.sprite.animations.add('idle0', [12], 24, false);
+                this.sprite.animations.add('idle3', [25], 24, false);
+                this.sprite.animations.add('idle1', [38], 24, false);
+                this.sprite.animations.add('idle2', [51], 24, false);
+                this.sprite.animations.play('idle0');
             };
             CharacterController.prototype.moveTo = function (tile, next) {
                 var worldPos = Pylearn.Util.getWorldPosition(tile);
-                var animation = 'walk' + this.character.direction;
-                this.sprite.animations.play(animation);
-                var moveTween = this.game.add.tween(this.sprite).to(worldPos, 1000);
+                var animationName = 'walk' + this.character.direction;
+                var animation = this.sprite.animations.play(animationName);
+                console.log(animation);
+                var moveTween = this.game.add.tween(this.sprite).to({ 'isoX': worldPos.x, 'isoY': worldPos.y }, 1000);
                 moveTween.onComplete.add(next);
                 moveTween.start();
+                console.log(moveTween);
             };
             CharacterController.prototype.rotateTo = function (direction, next) {
                 next();
             };
             CharacterController.prototype.attack = function (next) {
                 var animationName = 'attack' + this.character.direction;
+                console.log(animationName);
                 var animation = this.sprite.animations.play(animationName);
+                console.log(animation);
                 animation.onComplete.add(next);
             };
             return CharacterController;
@@ -239,8 +243,8 @@ var Pylearn;
     (function (Model) {
         (function (Direction) {
             Direction[Direction["N"] = 0] = "N";
-            Direction[Direction["S"] = 1] = "S";
-            Direction[Direction["E"] = 2] = "E";
+            Direction[Direction["E"] = 1] = "E";
+            Direction[Direction["S"] = 2] = "S";
             Direction[Direction["W"] = 3] = "W";
         })(Model.Direction || (Model.Direction = {}));
         var Direction = Model.Direction;
@@ -354,9 +358,9 @@ var Pylearn;
             switch (direction) {
                 case 0 /* N */:
                     return 0;
-                case 2 /* E */:
+                case 1 /* E */:
                     return Math.PI / 2;
-                case 1 /* S */:
+                case 2 /* S */:
                     return Math.PI;
                 case 3 /* W */:
                     return 3 * (Math.PI / 2);

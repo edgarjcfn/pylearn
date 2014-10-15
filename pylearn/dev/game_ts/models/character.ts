@@ -1,5 +1,5 @@
 module Pylearn.Model {
-	export enum Direction {N, S, E, W}
+	export enum Direction {N, E, S, W}
 	
     export class Character {
 
