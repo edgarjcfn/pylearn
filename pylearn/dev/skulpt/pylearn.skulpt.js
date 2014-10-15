@@ -19,23 +19,23 @@ var $builtinmodule = function(name)
     // 
     mod.Character = Sk.misceval.buildClass(mod, function($gbl, $loc) {
          $loc.__init__ = new Sk.builtin.func(function(self) {
-            self.character = new Character();
+            // self.character = new Character();
          });
 
          $loc.moveForward = new Sk.builtin.func(function(self,x) {
-            var moveCmd = new MoveCommand({'tiles':x.v}, self.character, Sk.animator);
+            var moveCmd = new Pylearn.Command.MoveCommand(x.v, SkulptAnimator);
             Sk.commandChain.append(moveCmd, Sk.currLineNo);
          });
          $loc.turnLeft = new Sk.builtin.func(function(self) {
-            var turnCmd = new TurnLeftCommand(self.character, Sk.animator);
+            var turnCmd = new Pylearn.Command.TurnLeftCommand(SkulptAnimator);
             Sk.commandChain.append(turnCmd, Sk.currLineNo);
          });
          $loc.turnRight = new Sk.builtin.func(function(self) {
-            var turnCmd = new TurnRightCommand(self.character, Sk.animator);
+            var turnCmd = new Pylearn.Command.TurnRightCommand(SkulptAnimator);
             Sk.commandChain.append(turnCmd, Sk.currLineNo);
          });
          $loc.attack = new Sk.builtin.func(function(self) {
-            var attackCmd = new AttackCommand(self.character, Sk.animator);
+            var attackCmd = new Pylearn.Command.AttackCommand(SkulptAnimator);
             Sk.commandChain.append(attackCmd, Sk.currLineNo);
          });
          $loc.position = new Sk.builtin.func(function(self) {

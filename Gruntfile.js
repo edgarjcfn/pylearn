@@ -2,22 +2,23 @@ module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        concat: {
+        ts: {
             options: {
-                separator: "\n", //add a new line after each file
+                
             },
-            game: {
+            dev: {
                 // the files to concatenate
                 src: [
-                'pylearn/dev/game/**/*.js'
+                'pylearn/dev/game/**/*.ts'
                 ],
                 // the location of the resulting JS file
-                dest: 'pylearn/dist/pylearn.js'
+                out: 'pylearn/dist/pylearn.ts.js',
+                watch: 'pylearn/dev/game'
             }
         },
         watch: {
             scripts: {
-                files: ['pylearn/dev/**/*.js'],
+                files: ['pylearn/dev/skulpt/pylearn.skulpt.js'],
                 tasks: ['on-change'],
                 options: {
                     interrupt: true
@@ -45,12 +46,12 @@ module.exports = function(grunt) {
         
     });
 
-    grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-http-server');
     grunt.loadNpmTasks('grunt-concurrent');
+    grunt.loadNpmTasks('grunt-ts');
 
     grunt.registerTask('dev', ['concurrent:dev'])
-    grunt.registerTask('on-change', ['concat:game', 'copy:skulpt']);
+    grunt.registerTask('on-change', ['copy:skulpt']);
 };
