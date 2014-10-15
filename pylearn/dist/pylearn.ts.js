@@ -76,21 +76,11 @@ var Pylearn;
                 this.animator = controller;
             }
             TurnLeftCommand.prototype.execute = function () {
-                switch (this.animator.character.direction) {
-                    case (0 /* N */):
-                        this.animator.character.direction = 3 /* W */;
-                        break;
-                    case (2 /* S */):
-                        this.animator.character.direction = 1 /* E */;
-                        break;
-                    case (1 /* E */):
-                        this.animator.character.direction = 0 /* N */;
-                        break;
-                    case (3 /* W */):
-                        this.animator.character.direction = 2 /* S */;
-                        break;
+                var newDirection = this.animator.character.direction - 1;
+                if (newDirection < 0) {
+                    newDirection = 3;
                 }
-                var newDirection = this.animator.character.direction;
+                this.animator.character.direction = newDirection;
                 this.animator.rotateTo(newDirection, this.next);
             };
             return TurnLeftCommand;
@@ -101,21 +91,8 @@ var Pylearn;
                 this.animator = controller;
             }
             TurnRightCommand.prototype.execute = function () {
-                switch (this.animator.character.direction) {
-                    case (0 /* N */):
-                        this.animator.character.direction = 1 /* E */;
-                        break;
-                    case (2 /* S */):
-                        this.animator.character.direction = 3 /* W */;
-                        break;
-                    case (1 /* E */):
-                        this.animator.character.direction = 2 /* S */;
-                        break;
-                    case (3 /* W */):
-                        this.animator.character.direction = 0 /* N */;
-                        break;
-                }
-                var newDirection = this.animator.character.direction;
+                var newDirection = (this.animator.character.direction + 1) % 4;
+                this.animator.character.direction = newDirection;
                 this.animator.rotateTo(newDirection, this.next);
             };
             return TurnRightCommand;

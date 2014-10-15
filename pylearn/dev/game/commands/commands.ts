@@ -47,23 +47,12 @@ module Pylearn.Command {
 		}
 
 		execute():void {
-			
-			switch (this.animator.character.direction) {
-				case (Pylearn.Model.Direction.N) :
-					this.animator.character.direction = Pylearn.Model.Direction.W;
-					break;
-				case (Pylearn.Model.Direction.S) :
-					this.animator.character.direction = Pylearn.Model.Direction.E;
-					break;
-				case (Pylearn.Model.Direction.E) :
-					this.animator.character.direction = Pylearn.Model.Direction.N;
-					break;
-				case (Pylearn.Model.Direction.W) :
-					this.animator.character.direction = Pylearn.Model.Direction.S;
-					break;
+			var newDirection = this.animator.character.direction-1;
+			if (newDirection < 0)
+			{
+				newDirection = 3;
 			}
-
-			var newDirection = this.animator.character.direction;
+			this.animator.character.direction = newDirection;
 			this.animator.rotateTo(newDirection, this.next);
 		}
 	}
@@ -77,23 +66,8 @@ module Pylearn.Command {
 		}
 
 		execute():void {
-			
-			switch (this.animator.character.direction) {
-				case (Pylearn.Model.Direction.N) :
-					this.animator.character.direction = Pylearn.Model.Direction.E;
-					break;
-				case (Pylearn.Model.Direction.S) :
-					this.animator.character.direction = Pylearn.Model.Direction.W;
-					break;
-				case (Pylearn.Model.Direction.E) :
-					this.animator.character.direction = Pylearn.Model.Direction.S;
-					break;
-				case (Pylearn.Model.Direction.W) :
-					this.animator.character.direction = Pylearn.Model.Direction.N;
-					break;
-			}
-
-			var newDirection = this.animator.character.direction;
+			var newDirection = (this.animator.character.direction+1) % 4;
+			this.animator.character.direction = newDirection;
 			this.animator.rotateTo(newDirection, this.next);
 
 		}
