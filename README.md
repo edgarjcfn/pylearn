@@ -6,6 +6,7 @@ A game to learn python by typing into a browser-based interpreter
 # this is a work in progress
 
 ## Current version uses
+ - [Typescript](http://www.typescriptlang.org/) - Strongly typed language that compiles to Javascript
  - [Skulpt](http://skulpt.org) - Browser-based python compiler and interpreter
  - [Phaser](httpL//phaser.io) - HTML5 game framework.
  - [Phaser Isometric Plugin](https://github.com/lewster32/phaser-plugin-isometric) - By @lewster32
@@ -14,7 +15,7 @@ A game to learn python by typing into a browser-based interpreter
  - Character Sprites from [Rener's Tile Sets](http://www.reinerstilesets.de)
 
 ## TODO 
- - [ ] Migrate to Typescript
+ - [x] Migrate to Typescript
  - [ ] Implement Level Loading
  - [ ] Implement Level Progression (instructions, win/lose)
  - [ ] Add more scenes (preloading, main menu, level select, etc)
