@@ -9,11 +9,11 @@ module.exports = function(grunt) {
             dev: {
                 // the files to concatenate
                 src: [
-                'pylearn/dev/game_ts/**/*.ts'
+                'pylearn/dev/game/**/*.ts'
                 ],
                 // the location of the resulting JS file
                 out: 'pylearn/dist/pylearn.ts.js',
-                watch: 'pylearn/dev/game_ts'
+                watch: 'pylearn/dev/game'
             }
         },
         watch: {
