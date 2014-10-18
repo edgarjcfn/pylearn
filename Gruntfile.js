@@ -12,7 +12,7 @@ module.exports = function(grunt) {
                 'pylearn/dev/game/**/*.ts'
                 ],
                 // the location of the resulting JS file
-                out: 'pylearn/dist/pylearn.ts.js'
+                out: 'pylearn/dist/pylearn.js'
             }
         },
         watch: {
