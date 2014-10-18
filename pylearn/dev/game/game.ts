@@ -15,7 +15,7 @@ module Pylearn {
 
         boot() {
             super.boot();
-            this.isoPlugin = <Phaser.Plugin.Isometric> this.plugins.add(new Phaser.Plugin.Isometric(this));
+            this.isoPlugin = <Phaser.Plugin.Isometric> this.add.plugin(new Phaser.Plugin.Isometric(this));
             this.isoPlugin.projector.anchor.setTo(0.5, 0.2);
             this.state.start('Boot');   
         }
