@@ -12,18 +12,25 @@ module.exports = function(grunt) {
                 'pylearn/dev/game/**/*.ts'
                 ],
                 // the location of the resulting JS file
-                out: 'pylearn/dist/pylearn.ts.js',
-                watch: 'pylearn/dev/game'
+                out: 'pylearn/dist/pylearn.ts.js'
             }
         },
         watch: {
-            scripts: {
+            skulpt: {
                 files: ['pylearn/dev/skulpt/pylearn.skulpt.js'],
-                tasks: ['on-change'],
+                tasks: ['copy:skulpt'],
                 options: {
                     interrupt: true
                 }
             },
+
+            ts: {
+                files: ['pylearn/dev/game/**/*.ts'],
+                tasks: ['ts:dev'],
+                options: {
+                    interrupt: true
+                }
+            }
             
         },
         copy: {
@@ -40,7 +47,12 @@ module.exports = function(grunt) {
             }
         },
         concurrent : {
-            dev : ['http-server', 'watch']
+            dev : {
+                tasks: ['http-server', 'watch:skulpt', 'watch:ts'],
+                options: {
+                    logConcurrentOutput:true
+                }
+            }
         }
 
         
@@ -53,5 +65,4 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-ts');
 
     grunt.registerTask('dev', ['concurrent:dev'])
-    grunt.registerTask('on-change', ['copy:skulpt']);
 };
