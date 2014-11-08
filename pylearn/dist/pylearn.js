@@ -267,6 +267,44 @@ var Pylearn;
 })(Pylearn || (Pylearn = {}));
 var Pylearn;
 (function (Pylearn) {
+    var Model;
+    (function (Model) {
+        (function (TileTypeId) {
+            TileTypeId[TileTypeId["Simple"] = 0] = "Simple";
+            TileTypeId[TileTypeId["Chest"] = 1] = "Chest";
+        })(Model.TileTypeId || (Model.TileTypeId = {}));
+        var TileTypeId = Model.TileTypeId;
+        var Tile = (function () {
+            function Tile() {
+                this._components = [];
+            }
+            Tile.prototype.addComponent = function (comp) {
+                this._components.push(comp);
+                comp.setTile(this);
+            };
+            Tile.prototype.getComponent = function (id) {
+                for (var i = 0; i < this._components.length; i++) {
+                    if (this._components[i].id() == id) {
+                        return this._components[i];
+                    }
+                }
+                return null;
+            };
+            Tile.prototype.removeComponent = function (id) {
+                for (var i = 0; i < this._components.length; i++) {
+                    if (this._components[i].id() == id) {
+                        this._components.splice(i, 1);
+                        break;
+                    }
+                }
+            };
+            return Tile;
+        })();
+        Model.Tile = Tile;
+    })(Model = Pylearn.Model || (Pylearn.Model = {}));
+})(Pylearn || (Pylearn = {}));
+var Pylearn;
+(function (Pylearn) {
     var Boot = (function (_super) {
         __extends(Boot, _super);
         function Boot() {

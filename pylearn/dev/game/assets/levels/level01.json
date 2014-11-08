@@ -1,0 +1,13 @@
+{
+	"tiles": [
+		["O","O","O"],
+		["O","X","O"],
+		["O","O","O"]
+	],
+	"objectives" : [
+		{
+			"tile": {"x":1, "y":1},
+			"action" : "attack"
+		}
+	]
+}

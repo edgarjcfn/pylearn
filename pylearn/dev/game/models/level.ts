@@ -1,5 +1,6 @@
 module Pylearn.Model {
-    export class Level {
 
+    export class Level {
+//        tiles: Pylearn.Model.Tile
     }
 }
