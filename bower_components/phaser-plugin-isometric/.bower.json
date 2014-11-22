@@ -1,0 +1,13 @@
+{
+  "name": "phaser-plugin-isometric",
+  "homepage": "https://github.com/edgarjcfn/phaser-plugin-isometric",
+  "_release": "e12516f6b6",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "e12516f6b6e1caf659c795d8efbc3fa1e84e086d"
+  },
+  "_source": "git://github.com/edgarjcfn/phaser-plugin-isometric.git",
+  "_target": "*",
+  "_originalSource": "edgarjcfn/phaser-plugin-isometric"
+}
