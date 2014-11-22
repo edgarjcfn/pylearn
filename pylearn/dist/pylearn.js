@@ -179,11 +179,13 @@ var Pylearn;
                 var direction = this.directionFromString(directionName);
                 this.pirate = new Pylearn.Model.Character(isoX, isoY, direction);
             };
-            LevelController.prototype.addIsoSprite = function (isoX, isoY, spriteName) {
+            LevelController.prototype.addIsoSprite = function (isoX, isoY, spriteName, anchorX, anchorY) {
+                if (anchorX === void 0) { anchorX = 0.5; }
+                if (anchorY === void 0) { anchorY = 0; }
                 var screenX = isoX * 64;
                 var screenY = isoY * 64;
                 var tile = this.game.isoPlugin.addIsoSprite(screenX, screenY, 0, spriteName, 0, this.isoGroup);
-                tile.anchor.set(0.5, 0);
+                tile.anchor.set(anchorX, anchorY);
             };
             LevelController.prototype.directionFromString = function (dir) {
                 switch (dir) {

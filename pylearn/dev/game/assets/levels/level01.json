@@ -1,14 +1,15 @@
 {
 	"tiles": [
-		["O","O","O","O"],
-		["E","X","O","O"],
-		["O","O","O","O"],
-		["O","O","O","O"]
+		["O","O","O","S"],
+		["X","O","O","O"],
+		["O","X","O","O"],
+		["O","O","O","X"],
+		["O","O","O","X"]
 	],
 	"introMessages" : [
 		{ 
 			"title" : "Welcome",
-			"content" : "Welcome, Player! Help our Pyrate get to the treasure."
+			"content" : "Olá, coshalinda"
 		},
 		{ 
 			"title" : "Run your code",

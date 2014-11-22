@@ -18,12 +18,12 @@ module Pylearn.Controller {
             this.pirate = new Pylearn.Model.Character(isoX, isoY, direction)
         }
 
-        addIsoSprite(isoX:number, isoY:number, spriteName:String):void {
+        addIsoSprite(isoX:number, isoY:number, spriteName:String, anchorX:number = 0.5, anchorY:number = 0):void {
             var screenX = isoX * 64;
             var screenY = isoY * 64;
 
             var tile = this.game.isoPlugin.addIsoSprite(screenX, screenY, 0, spriteName, 0, this.isoGroup);
-            tile.anchor.set(0.5, 0);
+            tile.anchor.set(anchorX, anchorY);
         }
 
         directionFromString(dir:String):Pylearn.Model.Direction {
