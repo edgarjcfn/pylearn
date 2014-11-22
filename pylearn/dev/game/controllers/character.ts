@@ -22,7 +22,7 @@ module Pylearn.Controller {
         
         create(pirate:Pylearn.Model.Character) {
             this.character = pirate;
-            
+
             var worldPos = Pylearn.Util.getWorldPosition(this.character.position);
             this.sprite = this.game.isoPlugin.addIsoSprite(worldPos.x, worldPos.y, 0, 'pirate', 0);
             this.sprite.anchor.set(0.5, 0.5);
@@ -42,7 +42,8 @@ module Pylearn.Controller {
             this.sprite.animations.add('idle1', [38], 24, false);
             this.sprite.animations.add('idle2', [51], 24, false);
 
-            this.sprite.animations.play('idle0');
+            var idleAnimation = 'idle' + this.character.direction;
+            this.sprite.animations.play(idleAnimation);
 
         }
 
@@ -57,7 +58,6 @@ module Pylearn.Controller {
             moveTween.onComplete.add(next);
             moveTween.start();
             console.log(moveTween);
-    
         }
 
         rotateTo(direction: Pylearn.Model.Direction, next: ControllerDelegate) : void {

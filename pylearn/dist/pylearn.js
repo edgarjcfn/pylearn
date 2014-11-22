@@ -135,7 +135,8 @@ var Pylearn;
                 this.sprite.animations.add('idle3', [25], 24, false);
                 this.sprite.animations.add('idle1', [38], 24, false);
                 this.sprite.animations.add('idle2', [51], 24, false);
-                this.sprite.animations.play('idle0');
+                var idleAnimation = 'idle' + this.character.direction;
+                this.sprite.animations.play(idleAnimation);
             };
             CharacterController.prototype.moveTo = function (tile, next) {
                 var worldPos = Pylearn.Util.getWorldPosition(tile);
