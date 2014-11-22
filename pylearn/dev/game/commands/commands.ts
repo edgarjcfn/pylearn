@@ -5,6 +5,9 @@ module Pylearn.Command {
 		execute():void;
 	}
 
+	//
+	// Move 
+	//
 	export class MoveCommand implements ICommand {
 		next: Pylearn.Controller.ControllerDelegate;
 		amount: number;
@@ -38,6 +41,9 @@ module Pylearn.Command {
 		}
 	}
 
+	//
+	// Turn Left
+	//
 	export class TurnLeftCommand implements ICommand {
 		next: Pylearn.Controller.ControllerDelegate;
 		animator: Pylearn.Controller.ICharacterController;
@@ -57,6 +63,9 @@ module Pylearn.Command {
 		}
 	}
 
+	// 
+	// Turn Right
+	// 
 	export class TurnRightCommand implements ICommand {
 		next: Pylearn.Controller.ControllerDelegate;
 		animator: Pylearn.Controller.ICharacterController;
@@ -73,6 +82,9 @@ module Pylearn.Command {
 		}
 	}
 
+	//
+	// Attack!
+	//
 	export class AttackCommand implements ICommand {
 		next: Pylearn.Controller.ControllerDelegate;
 		animator: Pylearn.Controller.ICharacterController;

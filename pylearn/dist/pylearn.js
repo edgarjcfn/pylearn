@@ -244,11 +244,72 @@ var Pylearn;
     var Model;
     (function (Model) {
         var Level = (function () {
-            function Level() {
+            function Level(jsonContents) {
             }
             return Level;
         })();
         Model.Level = Level;
+    })(Model = Pylearn.Model || (Pylearn.Model = {}));
+})(Pylearn || (Pylearn = {}));
+var Pylearn;
+(function (Pylearn) {
+    var Model;
+    (function (Model) {
+        var Message = (function () {
+            function Message(title, content, icon) {
+                this.title = title;
+                this.content = content;
+                this.icon = icon;
+            }
+            return Message;
+        })();
+        Model.Message = Message;
+    })(Model = Pylearn.Model || (Pylearn.Model = {}));
+})(Pylearn || (Pylearn = {}));
+var Pylearn;
+(function (Pylearn) {
+    var Model;
+    (function (Model) {
+        (function (TileTypeId) {
+            TileTypeId[TileTypeId["Simple"] = 0] = "Simple";
+            TileTypeId[TileTypeId["Chest"] = 1] = "Chest";
+            TileTypeId[TileTypeId["SpawnPlayer"] = 2] = "SpawnPlayer";
+        })(Model.TileTypeId || (Model.TileTypeId = {}));
+        var TileTypeId = Model.TileTypeId;
+        var EmptyTileComponent = (function () {
+            function EmptyTileComponent() {
+            }
+            EmptyTileComponent.prototype.id = function () {
+                return 0 /* Simple */;
+            };
+            EmptyTileComponent.prototype.sprite = function () {
+                return null;
+            };
+            EmptyTileComponent.prototype.setTile = function (tile) {
+                this._tile = tile;
+            };
+            EmptyTileComponent.prototype.onPlayerAction = function (action) {
+            };
+            return EmptyTileComponent;
+        })();
+        Model.EmptyTileComponent = EmptyTileComponent;
+        var ChestTileComponent = (function (_super) {
+            __extends(ChestTileComponent, _super);
+            function ChestTileComponent() {
+                _super.apply(this, arguments);
+            }
+            return ChestTileComponent;
+        })(EmptyTileComponent);
+        Model.ChestTileComponent = ChestTileComponent;
+        var SpawnPlayerComponent = (function (_super) {
+            __extends(SpawnPlayerComponent, _super);
+            function SpawnPlayerComponent(direction) {
+                _super.call(this);
+                this._direction = direction;
+            }
+            return SpawnPlayerComponent;
+        })(EmptyTileComponent);
+        Model.SpawnPlayerComponent = SpawnPlayerComponent;
     })(Model = Pylearn.Model || (Pylearn.Model = {}));
 })(Pylearn || (Pylearn = {}));
 var Pylearn;
@@ -263,21 +324,24 @@ var Pylearn;
             return TileCoordinate;
         })();
         Model.TileCoordinate = TileCoordinate;
-    })(Model = Pylearn.Model || (Pylearn.Model = {}));
-})(Pylearn || (Pylearn = {}));
-var Pylearn;
-(function (Pylearn) {
-    var Model;
-    (function (Model) {
-        (function (TileTypeId) {
-            TileTypeId[TileTypeId["Simple"] = 0] = "Simple";
-            TileTypeId[TileTypeId["Chest"] = 1] = "Chest";
-        })(Model.TileTypeId || (Model.TileTypeId = {}));
-        var TileTypeId = Model.TileTypeId;
         var Tile = (function () {
             function Tile() {
                 this._components = [];
             }
+            Tile.prototype.loadFromJson = function (x, y, jsonData) {
+                this.position = new TileCoordinate(x, y);
+                switch (jsonData) {
+                    case "O":
+                        this.addComponent(new Model.EmptyTileComponent());
+                    case "X":
+                        this.addComponent(new Model.ChestTileComponent());
+                    case "N":
+                    case "S":
+                    case "E":
+                    case "W":
+                        this.addComponent(new Model.SpawnPlayerComponent(jsonData));
+                }
+            };
             Tile.prototype.addComponent = function (comp) {
                 this._components.push(comp);
                 comp.setTile(this);

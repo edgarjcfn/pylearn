@@ -1,21 +1,38 @@
 module Pylearn.Model {
 
-	export enum TileTypeId {
-		Simple,
-		Chest
-	}
+    export class TileCoordinate {
+        x: number;
+        y: number;
 
-    export interface ITileComponent {
-    	setTile(tile:Tile):void;
-    	id():TileTypeId;
+        constructor(x:number, y:number) {
+            this.x = x;
+            this.y = y;
+        }
     }
 
-    export class Tile {
+	export class Tile {
         public position: TileCoordinate;
         private _components: Array<ITileComponent>;
 
         constructor() {
         	this._components = [];
+        }
+
+        loadFromJson(x:number, y:number, jsonData:String):void {
+            this.position = new TileCoordinate(x, y);
+
+            switch (jsonData)
+            {
+                case "O":
+                    this.addComponent(new EmptyTileComponent());
+                case "X":
+                    this.addComponent(new ChestTileComponent());
+                case "N":
+                case "S":
+                case "E":
+                case "W":
+                    this.addComponent(new SpawnPlayerComponent(jsonData));
+            }
         }
 
         addComponent(comp:ITileComponent):void {

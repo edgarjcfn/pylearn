@@ -1,13 +1,26 @@
 {
+	// N,S,E,W = Starting point, with facing direction
+	// X = Treasure Chest tile
+	// O = Normal tile
 	"tiles": [
 		["O","O","O"],
-		["O","X","O"],
+		["E","X","O"],
 		["O","O","O"]
 	],
-	"objectives" : [
+	"introMessages" : [
+		{ 
+			"title" : "Welcome",
+			"content" : "Welcome, Player! Help our Pyrate get to the treasure."
+		},
+		{ 
+			"title" : "Run your code",
+			"content" : "Type pyrate.moveForward(1) on the box to the left and hit 'Run'"
+		}
+	],
+	"winMessages" : [
 		{
-			"tile": {"x":1, "y":1},
-			"action" : "attack"
+			"title" : "Well done!",
+			"content" : "Let's move on to the next level"
 		}
 	]
 }
