@@ -23,7 +23,7 @@ var $builtinmodule = function(name)
          });
 
          $loc.moveForward = new Sk.builtin.func(function(self,x) {
-            var moveCmd = new Pylearn.Command.MoveCommand(x.v, SkulptAnimator);
+            var moveCmd = new Pylearn.Command.MoveCommand(x.v, SkulptAnimator, SkulptLevel);
             Sk.commandChain.append(moveCmd, Sk.currLineNo);
          });
          $loc.turnLeft = new Sk.builtin.func(function(self) {

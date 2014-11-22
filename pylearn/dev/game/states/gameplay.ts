@@ -34,6 +34,7 @@ module Pylearn {
 
             if (!levelName) {
                 levelName = Pylearn.LevelNames()[0];
+                window.location.href = window.location.href + '#' + levelName;
             }
 
             return levelName;

@@ -15,5 +15,9 @@ module Pylearn.Model {
             this.position.x += x;
             this.position.y += y;
         }
+
+        moveTo(coord:TileCoordinate) : void {
+            this.position = coord;
+        }
     }
 }

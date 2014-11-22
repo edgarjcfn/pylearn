@@ -46,27 +46,36 @@ var Pylearn;
     var Command;
     (function (Command) {
         var MoveCommand = (function () {
-            function MoveCommand(amount, controller) {
+            function MoveCommand(amount, controller, tileController) {
                 this.amount = amount;
                 this.animator = controller;
+                this.tileController = tileController;
             }
             MoveCommand.prototype.execute = function () {
-                switch (this.animator.character.direction) {
+                var position = this.animator.character.position;
+                var direction = this.animator.character.direction;
+                var boundsX = this.tileController.getWidth() - 1;
+                var boundsY = this.tileController.getHeight() - 1;
+                switch (direction) {
                     case (0 /* N */):
-                        this.animator.character.moveBy(0, -(this.amount));
+                        position.y -= this.amount;
                         break;
                     case (2 /* S */):
-                        this.animator.character.moveBy(0, (this.amount));
+                        position.y += this.amount;
                         break;
                     case (1 /* E */):
-                        this.animator.character.moveBy((this.amount), 0);
+                        position.x += this.amount;
                         break;
                     case (3 /* W */):
-                        this.animator.character.moveBy(-(this.amount), 0);
+                        position.x -= this.amount;
                         break;
                 }
-                var newPosition = this.animator.character.position;
-                this.animator.moveTo(newPosition, this.next);
+                position.x = Math.max(0, position.x);
+                position.x = Math.min(boundsX, position.x);
+                position.y = Math.max(0, position.y);
+                position.y = Math.min(boundsY, position.y);
+                this.animator.character.moveTo(position);
+                this.animator.moveTo(position, this.next);
             };
             return MoveCommand;
         })();
@@ -257,6 +266,12 @@ var Pylearn;
                 var tile = this.level.getTileAt(tilePosition.x, tilePosition.y);
                 tile.onPlayerAction(action, this);
             };
+            LevelController.prototype.getHeight = function () {
+                return this.level.height;
+            };
+            LevelController.prototype.getWidth = function () {
+                return this.level.width;
+            };
             return LevelController;
         })();
         Controller.LevelController = LevelController;
@@ -343,6 +358,9 @@ var Pylearn;
             Character.prototype.moveBy = function (x, y) {
                 this.position.x += x;
                 this.position.y += y;
+            };
+            Character.prototype.moveTo = function (coord) {
+                this.position = coord;
             };
             return Character;
         })();
@@ -579,6 +597,7 @@ var Pylearn;
             levelName = levelName.substring(1);
             if (!levelName) {
                 levelName = Pylearn.LevelNames()[0];
+                window.location.href = window.location.href + '#' + levelName;
             }
             return levelName;
         };

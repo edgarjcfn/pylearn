@@ -100,5 +100,13 @@ module Pylearn.Controller {
             var tile = this.level.getTileAt(tilePosition.x, tilePosition.y);
             tile.onPlayerAction(action, this);
         }
+
+        getHeight():number {
+            return this.level.height;
+        }
+
+        getWidth():number {
+            return this.level.width;
+        }
     }
 }
