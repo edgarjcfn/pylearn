@@ -6,14 +6,21 @@ module Pylearn {
         (title:String, message:String, icon:String, callback: ()=>void);
     }
 
+    export interface HideMessageDelegate{
+        ():void;
+    }
+
     export class Game extends Phaser.Game {
         isoPlugin: Phaser.Plugin.Isometric;
         showMessage: ShowMessageDelegate;
+        hideMessage: HideMessageDelegate;
          
-        constructor(showMessage:ShowMessageDelegate) {
+        constructor(showMessage:ShowMessageDelegate, hideMessage:HideMessageDelegate) {
             super(700, 600, Phaser.AUTO, 'gameCanvas', null);
-            
+
             this.showMessage = showMessage;
+            this.hideMessage = hideMessage;
+            
             this.state.add('Boot', Boot, false);
             this.state.add('Preloader', Preloader, false);
             this.state.add('Gameplay', Gameplay, false);
@@ -27,13 +34,4 @@ module Pylearn {
         }
         
     }
-}   
-
-window.onload = () =>  {
-    var showMessage = function(title, message, icon, callback) {
-        console.log(title + " : " + message);
-        callback();
-    }
-
-    var game = new Pylearn.Game(showMessage); 
 }

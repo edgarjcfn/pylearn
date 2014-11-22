@@ -26,6 +26,7 @@
     "ace-builds": "~1.1.7",
     "skulpt": "skulpt/skulpt-dist#~0.9.7",
     "phaser": "~2.1.1",
-    "phaser-plugin-isometric": "edgarjcfn/phaser-plugin-isometric"
+    "phaser-plugin-isometric": "edgarjcfn/phaser-plugin-isometric",
+    "sweetalert": "~0.3.2"
   }
 }

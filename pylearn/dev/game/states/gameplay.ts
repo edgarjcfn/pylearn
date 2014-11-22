@@ -13,7 +13,7 @@ module Pylearn {
 
             this.levelController = new Pylearn.Controller.LevelController(pylearnGame, levelToPlay);
             this.characterController = new Pylearn.Controller.CharacterController(pylearnGame);
-            this.messageController = new Pylearn.Controller.MessagesController(this.levelController, pylearnGame.showMessage);
+            this.messageController = new Pylearn.Controller.MessagesController(this.levelController, pylearnGame.showMessage, pylearnGame.hideMessage);
 
             this.levelController.create();
             this.characterController.create(this.levelController.pirate);

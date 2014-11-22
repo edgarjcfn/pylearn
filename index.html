@@ -7,9 +7,13 @@
   <script src="bower_components/ace-builds/src-min/ace.js"></script>
   <script src="bower_components/phaser/build/phaser.js"></script>
   <script src="bower_components/phaser-plugin-isometric/dist/phaser-plugin-isometric.js"></script>
+  <script src="bower_components/sweetalert/lib/sweet-alert.js"></script>
 
   <script src="pylearn/dist/pylearn.js"></script>
   
+
+
+  <link rel="stylesheet" type="text/css" href="bower_components/sweetalert/lib/sweet-alert.css">
   <style type="text/css" media="screen">
   #editor { 
     position: absolute;
@@ -82,11 +86,32 @@ char.attack();
   <script type="text/javascript">
   $(document).ready(function()
   {
+    // Setup Code Editor
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/monokai");
     editor.getSession().setMode("ace/mode/python");
     editor.setFontSize('16pt');
     editor.setHighlightActiveLine(true);
+
+    // Setup Game
+    var showMessage = function(title, message, icon, callback) {
+        sweetAlert({
+              title: title,
+              text: message,
+              type: icon,
+              showCancelButton: false,
+              confirmButtonColor: "#DD6B55",
+              confirmButtonText: "OK",
+              closeOnConfirm: false
+            }, callback);
+    }
+
+    var hideMessage = function() {
+      $('.sweet-alert').hide();
+      $('.sweet-overlay').hide();
+    }
+
+    var game = new Pylearn.Game(showMessage, hideMessage);
 
   });
   </script>
