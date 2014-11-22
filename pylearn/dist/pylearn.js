@@ -169,6 +169,8 @@ var Pylearn;
     (function (Controller) {
         var LevelController = (function () {
             function LevelController(game, levelName) {
+                this.introIndex = 0;
+                this.successIndex = 0;
                 this.game = game;
                 this.isoGroup = this.game.add.group();
                 this.levelName = levelName;
@@ -199,16 +201,52 @@ var Pylearn;
             LevelController.prototype.create = function () {
                 var levelJson = this.game.cache.getText(this.levelName);
                 var levelData = JSON.parse(levelJson);
-                var level = new Pylearn.Model.Level();
-                level.loadFromJson(levelData);
-                for (var i = 0; i < level.tiles.length; i++) {
-                    var tile = level.tiles[i];
+                this.level = new Pylearn.Model.Level();
+                this.level.loadFromJson(levelData);
+                for (var i = 0; i < this.level.tiles.length; i++) {
+                    var tile = this.level.tiles[i];
                     tile.build(this);
                 }
+            };
+            LevelController.prototype.nextMessageIntro = function () {
+                var message = null;
+                if (this.level.introMessages.length > this.introIndex) {
+                    message = this.level.introMessages[this.introIndex];
+                    this.introIndex++;
+                }
+                return message;
+            };
+            LevelController.prototype.nextMessageSuccess = function () {
+                var message = null;
+                if (this.level.winMessages.length > this.successIndex) {
+                    message = this.level.winMessages[this.successIndex];
+                    this.successIndex++;
+                }
+                return message;
             };
             return LevelController;
         })();
         Controller.LevelController = LevelController;
+    })(Controller = Pylearn.Controller || (Pylearn.Controller = {}));
+})(Pylearn || (Pylearn = {}));
+var Pylearn;
+(function (Pylearn) {
+    var Controller;
+    (function (Controller) {
+        var MessagesController = (function () {
+            function MessagesController(provider, delegate) {
+                this.provider = provider;
+                this.showMessage = delegate;
+            }
+            MessagesController.prototype.showIntro = function () {
+                var message = this.provider.nextMessageIntro();
+                if (message) {
+                    this.showMessage(message.title, message.content, message.icon, this.showIntro.bind(this));
+                }
+            };
+            return MessagesController;
+        })();
+        Controller.MessagesController = MessagesController;
     })(Controller = Pylearn.Controller || (Pylearn.Controller = {}));
 })(Pylearn || (Pylearn = {}));
 var __extends = this.__extends || function (d, b) {
@@ -221,8 +259,9 @@ var Pylearn;
 (function (Pylearn) {
     var Game = (function (_super) {
         __extends(Game, _super);
-        function Game() {
+        function Game(showMessage) {
             _super.call(this, 700, 600, Phaser.AUTO, 'gameCanvas', null);
+            this.showMessage = showMessage;
             this.state.add('Boot', Pylearn.Boot, false);
             this.state.add('Preloader', Pylearn.Preloader, false);
             this.state.add('Gameplay', Pylearn.Gameplay, false);
@@ -238,7 +277,11 @@ var Pylearn;
     Pylearn.Game = Game;
 })(Pylearn || (Pylearn = {}));
 window.onload = function () {
-    var game = new Pylearn.Game();
+    var showMessage = function (title, message, icon, callback) {
+        console.log(title + " : " + message);
+        callback();
+    };
+    var game = new Pylearn.Game(showMessage);
 };
 var Pylearn;
 (function (Pylearn) {
@@ -461,11 +504,14 @@ var Pylearn;
         }
         Gameplay.prototype.create = function () {
             var levelToPlay = 'level01';
-            this.level = new Pylearn.Controller.LevelController(this.game, levelToPlay);
-            this.character = new Pylearn.Controller.CharacterController(this.game);
-            this.level.create();
-            this.character.create(this.level.pirate);
-            SkulptAnimator = this.character;
+            var pylearnGame = this.game;
+            this.levelController = new Pylearn.Controller.LevelController(pylearnGame, levelToPlay);
+            this.characterController = new Pylearn.Controller.CharacterController(pylearnGame);
+            this.messageController = new Pylearn.Controller.MessagesController(this.levelController, pylearnGame.showMessage);
+            this.levelController.create();
+            this.characterController.create(this.levelController.pirate);
+            SkulptAnimator = this.characterController;
+            this.messageController.showIntro();
         };
         return Gameplay;
     })(Phaser.State);

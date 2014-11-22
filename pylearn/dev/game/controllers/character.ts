@@ -3,15 +3,7 @@ module Pylearn.Controller {
         ():void;
     }
 
-    export interface ICharacterController {
-        character: Pylearn.Model.Character;
-
-        moveTo(tile: Pylearn.Model.TileCoordinate, next: ControllerDelegate) : void;
-        rotateTo(direction: Pylearn.Model.Direction, next: ControllerDelegate) : void;
-        attack(next: ControllerDelegate) : void;
-    }
-
-    export class CharacterController implements ICharacterController{
+    export class CharacterController implements Pylearn.Interfaces.ICharacterController{
         character: Pylearn.Model.Character;
         game: Pylearn.Game;
         sprite: Phaser.Sprite;

@@ -2,12 +2,18 @@
 /// <reference path="../../../bower_components/phaser-plugin-isometric/dist/phaser.plugin.isometric.d.ts" />
 
 module Pylearn {
+    export interface ShowMessageDelegate{
+        (title:String, message:String, icon:String, callback: ()=>void);
+    }
+
     export class Game extends Phaser.Game {
         isoPlugin: Phaser.Plugin.Isometric;
-
-        constructor() {
+        showMessage: ShowMessageDelegate;
+         
+        constructor(showMessage:ShowMessageDelegate) {
             super(700, 600, Phaser.AUTO, 'gameCanvas', null);
-
+            
+            this.showMessage = showMessage;
             this.state.add('Boot', Boot, false);
             this.state.add('Preloader', Preloader, false);
             this.state.add('Gameplay', Gameplay, false);
@@ -24,5 +30,10 @@ module Pylearn {
 }   
 
 window.onload = () =>  {
-    var game = new Pylearn.Game(); 
+    var showMessage = function(title, message, icon, callback) {
+        console.log(title + " : " + message);
+        callback();
+    }
+
+    var game = new Pylearn.Game(showMessage); 
 }

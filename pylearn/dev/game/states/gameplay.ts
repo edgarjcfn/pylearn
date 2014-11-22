@@ -1,21 +1,25 @@
 module Pylearn {
-    declare var SkulptAnimator : Pylearn.Controller.ICharacterController;
+    declare var SkulptAnimator : Pylearn.Interfaces.ICharacterController;
+    
     export class Gameplay extends Phaser.State {
-        character : Pylearn.Controller.CharacterController;
-        level : Pylearn.Controller.LevelController;
+        characterController : Pylearn.Controller.CharacterController;
+        levelController : Pylearn.Controller.LevelController;
+        messageController : Pylearn.Controller.MessagesController;
 
         create() {
 
             var levelToPlay = 'level01';
+            var pylearnGame = <Pylearn.Game> this.game;
 
-            this.level = new Pylearn.Controller.LevelController(<Pylearn.Game>this.game, levelToPlay);
-            this.character = new Pylearn.Controller.CharacterController(<Pylearn.Game> this.game);
+            this.levelController = new Pylearn.Controller.LevelController(pylearnGame, levelToPlay);
+            this.characterController = new Pylearn.Controller.CharacterController(pylearnGame);
+            this.messageController = new Pylearn.Controller.MessagesController(this.levelController, pylearnGame.showMessage);
 
-            this.level.create();
-            this.character.create(this.level.pirate);
+            this.levelController.create();
+            this.characterController.create(this.levelController.pirate);
 
-            SkulptAnimator = this.character;
-
+            SkulptAnimator = this.characterController;
+            this.messageController.showIntro();
         }
     }
 }

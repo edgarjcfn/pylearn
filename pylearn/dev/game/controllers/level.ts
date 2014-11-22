@@ -1,10 +1,11 @@
 module Pylearn.Controller {
-    export class LevelController {
+    export class LevelController implements Pylearn.Interfaces.IMessageProvider{
 
         game:Pylearn.Game;
         isoGroup:Phaser.Group;
         levelName:String;
         pirate:Pylearn.Model.Character;
+        level:Pylearn.Model.Level;
 
         constructor(game: Pylearn.Game, levelName:String) {
             this.game = game;
@@ -39,13 +40,36 @@ module Pylearn.Controller {
         create() {
             var levelJson = this.game.cache.getText(this.levelName);
             var levelData = JSON.parse(levelJson);
-            var level = new Pylearn.Model.Level();
-            level.loadFromJson(levelData);
+            this.level = new Pylearn.Model.Level();
+            this.level.loadFromJson(levelData);
 
-            for (var i=0; i < level.tiles.length; i++) {
-                var tile = level.tiles[i];
+            for (var i=0; i < this.level.tiles.length; i++) {
+                var tile = this.level.tiles[i];
                 tile.build(this);
             }
+        }
+
+        // 
+        // IMessageProvider
+        //
+        introIndex:number = 0;
+        successIndex:number = 0;
+        nextMessageIntro():Pylearn.Model.Message {
+            var message = null;
+            if (this.level.introMessages.length > this.introIndex) {
+                message = this.level.introMessages[this.introIndex];
+                this.introIndex++;
+            }
+            return message;
+        }
+
+        nextMessageSuccess():Pylearn.Model.Message {
+            var message = null;
+            if (this.level.winMessages.length > this.successIndex) {
+                message = this.level.winMessages[this.successIndex];
+                this.successIndex++;
+            }
+            return message;
         }
 
     }

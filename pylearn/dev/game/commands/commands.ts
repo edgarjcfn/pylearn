@@ -11,9 +11,9 @@ module Pylearn.Command {
 	export class MoveCommand implements ICommand {
 		next: Pylearn.Controller.ControllerDelegate;
 		amount: number;
-		animator: Pylearn.Controller.ICharacterController;
+		animator: Pylearn.Interfaces.ICharacterController;
 
-		constructor(amount: number, controller: Pylearn.Controller.ICharacterController) {
+		constructor(amount: number, controller: Pylearn.Interfaces.ICharacterController) {
 			this.amount = amount;
 			this.animator = controller;
 		}
@@ -46,9 +46,9 @@ module Pylearn.Command {
 	//
 	export class TurnLeftCommand implements ICommand {
 		next: Pylearn.Controller.ControllerDelegate;
-		animator: Pylearn.Controller.ICharacterController;
+		animator: Pylearn.Interfaces.ICharacterController;
 
-		constructor(controller: Pylearn.Controller.ICharacterController) {
+		constructor(controller: Pylearn.Interfaces.ICharacterController) {
 			this.animator = controller;
 		}
 
@@ -68,9 +68,9 @@ module Pylearn.Command {
 	// 
 	export class TurnRightCommand implements ICommand {
 		next: Pylearn.Controller.ControllerDelegate;
-		animator: Pylearn.Controller.ICharacterController;
+		animator: Pylearn.Interfaces.ICharacterController;
 
-		constructor(controller: Pylearn.Controller.ICharacterController) {
+		constructor(controller: Pylearn.Interfaces.ICharacterController) {
 			this.animator = controller;
 		}
 
@@ -87,9 +87,9 @@ module Pylearn.Command {
 	//
 	export class AttackCommand implements ICommand {
 		next: Pylearn.Controller.ControllerDelegate;
-		animator: Pylearn.Controller.ICharacterController;
+		animator: Pylearn.Interfaces.ICharacterController;
 
-		constructor(controller: Pylearn.Controller.ICharacterController) {
+		constructor(controller: Pylearn.Interfaces.ICharacterController) {
 			this.animator = controller;
 		}
 
