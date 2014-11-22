@@ -167,9 +167,10 @@ var Pylearn;
     var Controller;
     (function (Controller) {
         var LevelController = (function () {
-            function LevelController(game) {
+            function LevelController(game, levelName) {
                 this.game = game;
                 this.isoGroup = this.game.add.group();
+                this.levelName = levelName;
             }
             LevelController.prototype.setPlayerSpawn = function (isoX, isoY, direction) {
             };
@@ -180,6 +181,14 @@ var Pylearn;
                 tile.anchor.set(0.5, 0);
             };
             LevelController.prototype.create = function () {
+                var levelJson = this.game.cache.getText(this.levelName);
+                var levelData = JSON.parse(levelJson);
+                var level = new Pylearn.Model.Level();
+                level.loadFromJson(levelData);
+                for (var i = 0; i < level.tiles.length; i++) {
+                    var tile = level.tiles[i];
+                    tile.build(this);
+                }
             };
             return LevelController;
         })();
@@ -245,8 +254,32 @@ var Pylearn;
     var Model;
     (function (Model) {
         var Level = (function () {
-            function Level(jsonContents) {
+            function Level() {
+                this.tiles = [];
+                this.introMessages = [];
+                this.winMessages = [];
             }
+            Level.prototype.loadFromJson = function (json) {
+                for (var y = 0; y < json.tiles.length; y++) {
+                    var rows = json.tiles[y];
+                    for (var x = 0; x < rows.length; x++) {
+                        var tile = new Model.Tile();
+                        var jsonData = rows[x];
+                        tile.loadFromJson(x, y, jsonData);
+                        this.tiles.push(tile);
+                    }
+                }
+                for (var i = 0; i < json.introMessages.length; i++) {
+                    var jsonData = json.introMessages[i];
+                    var message = new Model.Message(jsonData.title, jsonData.content, null);
+                    this.introMessages.push(message);
+                }
+                for (var i = 0; i < json.winMessages.length; i++) {
+                    var jsonData = json.winMessages[i];
+                    var message = new Model.Message(jsonData.title, jsonData.content, 'success');
+                    this.winMessages.push(message);
+                }
+            };
             return Level;
         })();
         Model.Level = Level;
@@ -322,7 +355,6 @@ var Pylearn;
         Model.SpawnPlayerComponent = SpawnPlayerComponent;
     })(Model = Pylearn.Model || (Pylearn.Model = {}));
 })(Pylearn || (Pylearn = {}));
-var LevelBuilder = Pylearn.Controller.LevelController;
 var Pylearn;
 (function (Pylearn) {
     var Model;
@@ -409,8 +441,9 @@ var Pylearn;
             _super.apply(this, arguments);
         }
         Gameplay.prototype.create = function () {
+            var levelToPlay = 'level01';
             var pirate = new Pylearn.Model.Character(0, 0, 0 /* N */);
-            this.level = new Pylearn.Controller.LevelController(this.game);
+            this.level = new Pylearn.Controller.LevelController(this.game, levelToPlay);
             this.character = new Pylearn.Controller.CharacterController(this.game, pirate);
             this.level.create();
             this.character.create();
@@ -428,10 +461,18 @@ var Pylearn;
             _super.apply(this, arguments);
         }
         Preloader.prototype.preload = function () {
+            this.levelNames = [
+                'level01'
+            ];
             this.preloadBar = this.add.sprite(200, 250, 'preloadBar');
             this.load.setPreloadSprite(this.preloadBar);
             this.load.image('tile', 'pylearn/dev/game/assets/tile.png');
+            this.load.image('blue-tile', 'pylearn/dev/game/assets/blue-tile.png');
+            this.load.image('chest', 'pylearn/dev/game/assets/chest.png');
             this.load.atlasJSONHash('pirate', 'pylearn/dev/game/assets/pirate.png', 'pylearn/dev/game/assets/pirate.json');
+            for (var i = 0; i < this.levelNames.length; i++) {
+                this.load.text(this.levelNames[i], 'pylearn/dev/game/assets/levels/' + this.levelNames[i] + '.json');
+            }
         };
         Preloader.prototype.create = function () {
             var tween = this.add.tween(this.preloadBar).to({ alpha: 0 }, 1000, Phaser.Easing.Linear.None, true);

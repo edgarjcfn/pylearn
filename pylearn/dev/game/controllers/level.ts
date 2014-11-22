@@ -3,10 +3,12 @@ module Pylearn.Controller {
 
         game:Pylearn.Game;
         isoGroup:Phaser.Group;
+        levelName:String
 
-        constructor(game: Pylearn.Game) {
+        constructor(game: Pylearn.Game, levelName:String) {
             this.game = game;
             this.isoGroup = this.game.add.group();
+            this.levelName = levelName;
         }
 
         setPlayerSpawn(isoX:number, isoY:number, direction:String):void {
@@ -22,7 +24,15 @@ module Pylearn.Controller {
         }
 
         create() {
-            // TODO: Do something here
+            var levelJson = this.game.cache.getText(this.levelName);
+            var levelData = JSON.parse(levelJson);
+            var level = new Pylearn.Model.Level();
+            level.loadFromJson(levelData);
+
+            for (var i=0; i < level.tiles.length; i++) {
+                var tile = level.tiles[i];
+                tile.build(this);
+            }
         }
 
     }

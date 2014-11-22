@@ -1,7 +1,4 @@
 {
-	// N,S,E,W = Starting point, with facing direction
-	// X = Treasure Chest tile
-	// O = Normal tile
 	"tiles": [
 		["O","O","O"],
 		["E","X","O"],

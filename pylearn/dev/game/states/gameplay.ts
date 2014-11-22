@@ -6,8 +6,10 @@ module Pylearn {
 
         create() {
 
+            var levelToPlay = 'level01';
+
             var pirate = new Pylearn.Model.Character(0, 0, Pylearn.Model.Direction.N);
-            this.level = new Pylearn.Controller.LevelController(<Pylearn.Game>this.game);
+            this.level = new Pylearn.Controller.LevelController(<Pylearn.Game>this.game, levelToPlay);
             this.character = new Pylearn.Controller.CharacterController(<Pylearn.Game> this.game, pirate);
 
             this.level.create();
