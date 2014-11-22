@@ -1,10 +1,7 @@
 {
 	"tiles": [
-		["O","O","O","S"],
-		["O","O","O","X"],
-		["O","O","O","O"],
-		["O","O","O","O"],
-		["O","O","O","O"]
+		["O","S"],
+		["O","X"]
 	],
 	"introMessages" : [
 		{ 
@@ -13,7 +10,7 @@
 		},
 		{ 
 			"title" : "Run your code",
-			"content" : "Type pyrate.moveForward(1) on the box to the left and hit 'Run'"
+			"content" : "Press the Run Button and watch the magic happen"
 		}
 	],
 	"winMessages" : [

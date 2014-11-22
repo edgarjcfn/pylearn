@@ -1,9 +1,15 @@
 module Pylearn.Controller {
+
+	export interface MessageDismissedDelegate {
+		():void;
+	}
+
 	export class MessagesController {
 
 		showMessage:Pylearn.ShowMessageDelegate;
 		hideMessage:Pylearn.HideMessageDelegate;
 		provider:Pylearn.Interfaces.IMessageProvider;
+		onGameOverMessageDismissed:MessageDismissedDelegate
 
 		constructor(provider:Pylearn.Interfaces.IMessageProvider, showMessage:Pylearn.ShowMessageDelegate, hideMessage:Pylearn.HideMessageDelegate) {
 			this.provider = provider;
@@ -32,6 +38,7 @@ module Pylearn.Controller {
 			else
 			{
 				this.hideMessage();
+				this.onGameOverMessageDismissed();
 			}
 		}
 	}

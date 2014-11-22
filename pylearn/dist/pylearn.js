@@ -288,6 +288,7 @@ var Pylearn;
                 }
                 else {
                     this.hideMessage();
+                    this.onGameOverMessageDismissed();
                 }
             };
             return MessagesController;
@@ -560,17 +561,39 @@ var Pylearn;
             _super.apply(this, arguments);
         }
         Gameplay.prototype.create = function () {
-            var levelToPlay = 'level01';
+            this.currentLevel = this.getLevelToPlay();
             var pylearnGame = this.game;
-            this.levelController = new Pylearn.Controller.LevelController(pylearnGame, levelToPlay);
+            this.levelController = new Pylearn.Controller.LevelController(pylearnGame, this.currentLevel);
             this.characterController = new Pylearn.Controller.CharacterController(pylearnGame);
             this.messageController = new Pylearn.Controller.MessagesController(this.levelController, pylearnGame.showMessage, pylearnGame.hideMessage);
             this.levelController.create();
             this.characterController.create(this.levelController.pirate);
             SkulptAnimator = this.characterController;
             SkulptLevel = this.levelController;
-            this.levelController.onLevelWon = this.messageController.showCongratulations.bind(this.messageController);
+            this.levelController.onLevelWon = this.onLevelWon.bind(this);
+            this.messageController.onGameOverMessageDismissed = this.onMessageDismissed.bind(this);
             this.messageController.showIntro();
+        };
+        Gameplay.prototype.getLevelToPlay = function () {
+            var levelName = window.location.hash;
+            levelName = levelName.substring(1);
+            if (!levelName) {
+                levelName = Pylearn.LevelNames()[0];
+            }
+            return levelName;
+        };
+        Gameplay.prototype.onLevelWon = function () {
+            this.messageController.showCongratulations();
+        };
+        Gameplay.prototype.onMessageDismissed = function () {
+            var allLevels = Pylearn.LevelNames();
+            var currentIndex = allLevels.indexOf(this.currentLevel);
+            var nextIndex = currentIndex + 1;
+            if (nextIndex < allLevels.length) {
+                var nextLevelName = allLevels[nextIndex];
+                window.location.href = window.location.href.replace(window.location.hash, '#' + nextLevelName);
+                this.game.state.start('Gameplay', true, false);
+            }
         };
         return Gameplay;
     })(Phaser.State);
@@ -578,23 +601,29 @@ var Pylearn;
 })(Pylearn || (Pylearn = {}));
 var Pylearn;
 (function (Pylearn) {
+    function LevelNames() {
+        return [
+            'level01',
+            'level02',
+            'level03'
+        ];
+    }
+    Pylearn.LevelNames = LevelNames;
     var Preloader = (function (_super) {
         __extends(Preloader, _super);
         function Preloader() {
             _super.apply(this, arguments);
         }
         Preloader.prototype.preload = function () {
-            this.levelNames = [
-                'level01'
-            ];
+            var levelNames = Pylearn.LevelNames();
             this.preloadBar = this.add.sprite(200, 250, 'preloadBar');
             this.load.setPreloadSprite(this.preloadBar);
             this.load.image('tile', 'pylearn/dev/game/assets/tile.png');
             this.load.image('blue-tile', 'pylearn/dev/game/assets/blue-tile.png');
             this.load.image('chest', 'pylearn/dev/game/assets/chest.png');
             this.load.atlasJSONHash('pirate', 'pylearn/dev/game/assets/pirate.png', 'pylearn/dev/game/assets/pirate.json');
-            for (var i = 0; i < this.levelNames.length; i++) {
-                this.load.text(this.levelNames[i], 'pylearn/dev/game/assets/levels/' + this.levelNames[i] + '.json');
+            for (var i = 0; i < levelNames.length; i++) {
+                this.load.text(levelNames[i], 'pylearn/dev/game/assets/levels/' + levelNames[i] + '.json');
             }
         };
         Preloader.prototype.create = function () {

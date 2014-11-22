@@ -1,0 +1,21 @@
+{
+    "tiles": [
+        ["O","O","O","S"],
+        ["O","O","O","X"],
+        ["O","O","X","O"],
+        ["O","X","O","O"],
+        ["X","O","O","O"]
+    ],
+    "introMessages" : [
+        { 
+            "title" : "Level 3",
+            "content" : "This is the last level. Try downloading the code and making your own levels."
+        }
+    ],
+    "winMessages" : [
+        {
+            "title" : "Well done!",
+            "content" : "Let's move on to the next level"
+        }
+    ]
+}

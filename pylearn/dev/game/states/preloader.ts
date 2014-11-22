@@ -1,15 +1,20 @@
 module Pylearn {
+
+    export function LevelNames():Array<string> {
+        return [
+            'level01',
+            'level02',
+            'level03'
+        ];
+    }
  
     export class Preloader extends Phaser.State {
  
         preloadBar: Phaser.Sprite;
-        levelNames: Array<String>;
  
         preload() {
 
-            this.levelNames = [
-                'level01'
-            ];
+            var levelNames = Pylearn.LevelNames();
  
             //  Set-up our preloader sprite
             this.preloadBar = this.add.sprite(200, 250, 'preloadBar');
@@ -21,8 +26,8 @@ module Pylearn {
             this.load.image('chest', 'pylearn/dev/game/assets/chest.png');
             this.load.atlasJSONHash('pirate', 'pylearn/dev/game/assets/pirate.png', 'pylearn/dev/game/assets/pirate.json');
 
-            for (var i=0; i < this.levelNames.length; i++) {
-                this.load.text(this.levelNames[i], 'pylearn/dev/game/assets/levels/' + this.levelNames[i] + '.json');
+            for (var i=0; i < levelNames.length; i++) {
+                this.load.text(levelNames[i], 'pylearn/dev/game/assets/levels/' + levelNames[i] + '.json');
             }
         }
  

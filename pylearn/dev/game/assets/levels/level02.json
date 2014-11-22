@@ -1,0 +1,19 @@
+{
+	"tiles": [
+		["O","O","S"],
+		["O","O","O"],
+		["X","O","O"]
+	],
+	"introMessages" : [
+		{ 
+			"title" : "Level 02",
+			"content" : "Try something different now"
+		}		
+	],
+	"winMessages" : [
+		{
+			"title" : "Well done!",
+			"content" : "Let's move on to the next level"
+		}
+	]
+}
