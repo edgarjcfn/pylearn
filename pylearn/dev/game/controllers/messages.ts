@@ -22,5 +22,17 @@ module Pylearn.Controller {
 				this.hideMessage();
 			}
 		}
+
+		showCongratulations():void {
+			var message = this.provider.nextMessageSuccess();
+			if (message)
+			{
+				this.showMessage(message.title, message.content, message.icon, this.showCongratulations.bind(this));
+			}
+			else
+			{
+				this.hideMessage();
+			}
+		}
 	}
 }

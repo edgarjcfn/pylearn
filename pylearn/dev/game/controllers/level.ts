@@ -1,4 +1,9 @@
 module Pylearn.Controller {
+
+    export interface LevelWonDelegate {
+        ():void;
+    }
+
     export class LevelController implements Pylearn.Interfaces.IMessageProvider, Pylearn.Interfaces.ITileController{
 
         game:Pylearn.Game;
@@ -7,6 +12,7 @@ module Pylearn.Controller {
         pirate:Pylearn.Model.Character;
         level:Pylearn.Model.Level;
         treasureChests:number = 0;
+        onLevelWon:LevelWonDelegate;
 
         constructor(game: Pylearn.Game, levelName:String) {
             this.game = game;
@@ -34,7 +40,10 @@ module Pylearn.Controller {
         }
 
         checkGameOver():void {
-            //TODO: Check Game Over
+            if (this.treasureChests <= 0)
+            {
+                this.onLevelWon();
+            }
         }
 
         directionFromString(dir:String):Pylearn.Model.Direction {

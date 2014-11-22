@@ -22,6 +22,7 @@ module Pylearn {
             SkulptAnimator = this.characterController;
             SkulptLevel = this.levelController;
 
+            this.levelController.onLevelWon = this.messageController.showCongratulations.bind(this.messageController);
             this.messageController.showIntro();
         }
     }

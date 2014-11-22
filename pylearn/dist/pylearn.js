@@ -209,6 +209,9 @@ var Pylearn;
                 this.checkGameOver();
             };
             LevelController.prototype.checkGameOver = function () {
+                if (this.treasureChests <= 0) {
+                    this.onLevelWon();
+                }
             };
             LevelController.prototype.directionFromString = function (dir) {
                 switch (dir) {
@@ -273,6 +276,15 @@ var Pylearn;
                 var message = this.provider.nextMessageIntro();
                 if (message) {
                     this.showMessage(message.title, message.content, message.icon, this.showIntro.bind(this));
+                }
+                else {
+                    this.hideMessage();
+                }
+            };
+            MessagesController.prototype.showCongratulations = function () {
+                var message = this.provider.nextMessageSuccess();
+                if (message) {
+                    this.showMessage(message.title, message.content, message.icon, this.showCongratulations.bind(this));
                 }
                 else {
                     this.hideMessage();
@@ -557,6 +569,7 @@ var Pylearn;
             this.characterController.create(this.levelController.pirate);
             SkulptAnimator = this.characterController;
             SkulptLevel = this.levelController;
+            this.levelController.onLevelWon = this.messageController.showCongratulations.bind(this.messageController);
             this.messageController.showIntro();
         };
         return Gameplay;
