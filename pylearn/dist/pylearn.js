@@ -169,16 +169,17 @@ var Pylearn;
         var LevelController = (function () {
             function LevelController(game) {
                 this.game = game;
+                this.isoGroup = this.game.add.group();
             }
+            LevelController.prototype.setPlayerSpawn = function (isoX, isoY, direction) {
+            };
+            LevelController.prototype.addIsoSprite = function (isoX, isoY, spriteName) {
+                var screenX = isoX * 64;
+                var screenY = isoY * 64;
+                var tile = this.game.isoPlugin.addIsoSprite(screenX, screenY, 0, spriteName, 0, this.isoGroup);
+                tile.anchor.set(0.5, 0);
+            };
             LevelController.prototype.create = function () {
-                var tile;
-                var isoGroup = this.game.add.group();
-                for (var xx = 0; xx < 256; xx += 64) {
-                    for (var yy = 0; yy < 256; yy += 64) {
-                        tile = this.game.isoPlugin.addIsoSprite(xx, yy, 0, 'tile', 0, isoGroup);
-                        tile.anchor.set(0.5, 0);
-                    }
-                }
             };
             return LevelController;
         })();
@@ -266,6 +267,7 @@ var Pylearn;
         Model.Message = Message;
     })(Model = Pylearn.Model || (Pylearn.Model = {}));
 })(Pylearn || (Pylearn = {}));
+var LevelBuilder = Pylearn.Controller.LevelController;
 var Pylearn;
 (function (Pylearn) {
     var Model;
@@ -282,11 +284,11 @@ var Pylearn;
             EmptyTileComponent.prototype.id = function () {
                 return 0 /* Simple */;
             };
-            EmptyTileComponent.prototype.sprite = function () {
-                return null;
+            EmptyTileComponent.prototype.build = function (builder) {
+                builder.addIsoSprite(this.tile.position.x, this.tile.position.y, 'tile');
             };
             EmptyTileComponent.prototype.setTile = function (tile) {
-                this._tile = tile;
+                this.tile = tile;
             };
             EmptyTileComponent.prototype.onPlayerAction = function (action) {
             };
@@ -298,6 +300,10 @@ var Pylearn;
             function ChestTileComponent() {
                 _super.apply(this, arguments);
             }
+            ChestTileComponent.prototype.build = function (builder) {
+                builder.addIsoSprite(this.tile.position.x, this.tile.position.y, 'blue-tile');
+                builder.addIsoSprite(this.tile.position.x, this.tile.position.y, 'chest');
+            };
             return ChestTileComponent;
         })(EmptyTileComponent);
         Model.ChestTileComponent = ChestTileComponent;
@@ -305,13 +311,18 @@ var Pylearn;
             __extends(SpawnPlayerComponent, _super);
             function SpawnPlayerComponent(direction) {
                 _super.call(this);
-                this._direction = direction;
+                this.direction = direction;
             }
+            SpawnPlayerComponent.prototype.build = function (builder) {
+                _super.prototype.build.call(this, builder);
+                builder.setPlayerSpawn(this.tile.position.x, this.tile.position.y, this.direction);
+            };
             return SpawnPlayerComponent;
         })(EmptyTileComponent);
         Model.SpawnPlayerComponent = SpawnPlayerComponent;
     })(Model = Pylearn.Model || (Pylearn.Model = {}));
 })(Pylearn || (Pylearn = {}));
+var LevelBuilder = Pylearn.Controller.LevelController;
 var Pylearn;
 (function (Pylearn) {
     var Model;
@@ -360,6 +371,11 @@ var Pylearn;
                         this._components.splice(i, 1);
                         break;
                     }
+                }
+            };
+            Tile.prototype.build = function (levelBuilder) {
+                for (var i = 0; i < this._components.length; i++) {
+                    this._components[i].build(levelBuilder);
                 }
             };
             return Tile;

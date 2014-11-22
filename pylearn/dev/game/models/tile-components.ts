@@ -1,3 +1,5 @@
+import LevelBuilder = Pylearn.Controller.LevelController;
+
 module Pylearn.Model {
 	export enum TileTypeId {
 		Simple,
@@ -7,7 +9,7 @@ module Pylearn.Model {
 
     export interface ITileComponent {
     	id():TileTypeId;
-        sprite():String;
+        build(builder:LevelBuilder):void;
         setTile(tile:Tile):void;
         onPlayerAction(action:String):void;
     }
@@ -17,18 +19,18 @@ module Pylearn.Model {
     // 
     export class EmptyTileComponent implements ITileComponent {
 
-    	_tile:Tile;
+    	tile:Tile;
 
     	id():TileTypeId {
     		return TileTypeId.Simple;
     	}
 
-        sprite():String {
-        	return null;
+        build(builder:LevelBuilder):void {
+        	builder.addIsoSprite(this.tile.position.x, this.tile.position.y, 'tile');
         }
 
         setTile(tile:Tile):void {
-        	this._tile = tile;
+        	this.tile = tile;
         }
 
         onPlayerAction(action:String):void {
@@ -42,18 +44,26 @@ module Pylearn.Model {
     // 
     export class ChestTileComponent extends EmptyTileComponent {
 
+    	build(builder:LevelBuilder):void {
+        	builder.addIsoSprite(this.tile.position.x, this.tile.position.y, 'blue-tile');
+        	builder.addIsoSprite(this.tile.position.x, this.tile.position.y, 'chest');
+        }
     }
 
     //
     // Spawn Player
     // 
     export class SpawnPlayerComponent extends EmptyTileComponent {
-    	_direction:String;
+    	direction:String;
 
     	constructor(direction:String) {
     		super();
-    		this._direction = direction;
+    		this.direction = direction;
+    	}
 
+    	build(builder:LevelBuilder):void {
+    		super.build(builder);
+    		builder.setPlayerSpawn(this.tile.position.x, this.tile.position.y, this.direction);
     	}
     }
 

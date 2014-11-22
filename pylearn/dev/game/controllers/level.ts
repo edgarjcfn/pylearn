@@ -2,22 +2,27 @@ module Pylearn.Controller {
     export class LevelController {
 
         game:Pylearn.Game;
+        isoGroup:Phaser.Group;
 
         constructor(game: Pylearn.Game) {
             this.game = game;
+            this.isoGroup = this.game.add.group();
+        }
+
+        setPlayerSpawn(isoX:number, isoY:number, direction:String):void {
+            // TODO: Do something here
+        }
+
+        addIsoSprite(isoX:number, isoY:number, spriteName:String):void {
+            var screenX = isoX * 64;
+            var screenY = isoY * 64;
+
+            var tile = this.game.isoPlugin.addIsoSprite(screenX, screenY, 0, spriteName, 0, this.isoGroup);
+            tile.anchor.set(0.5, 0);
         }
 
         create() {
-            var tile;
-            var isoGroup = this.game.add.group();
-            for (var xx = 0; xx < 256; xx += 64) {
-                for (var yy = 0; yy < 256; yy += 64) {
-                    // Create a tile using the new game.add.isoSprite factory method at the specified position.
-                    // The last parameter is the group you want to add it to (just like game.add.sprite)
-                    tile = this.game.isoPlugin.addIsoSprite(xx, yy, 0, 'tile', 0, isoGroup);
-                    tile.anchor.set(0.5, 0);
-                }
-            }
+            // TODO: Do something here
         }
 
     }

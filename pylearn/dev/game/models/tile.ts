@@ -1,3 +1,5 @@
+import LevelBuilder = Pylearn.Controller.LevelController;
+
 module Pylearn.Model {
 
     export class TileCoordinate {
@@ -61,6 +63,13 @@ module Pylearn.Model {
         			break;
         		}
         	}
+        }
+
+        build(levelBuilder:LevelBuilder):void {
+            for (var i=0; i < this._components.length; i++)
+            {
+                this._components[i].build(levelBuilder);
+            }
         }
 
     }
