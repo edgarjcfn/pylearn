@@ -38,6 +38,10 @@ var $builtinmodule = function(name)
             var attackCmd = new Pylearn.Command.AttackCommand(SkulptAnimator, SkulptLevel);
             Sk.commandChain.append(attackCmd, Sk.currLineNo);
          });
+         $loc.pickUp = new Sk.builtin.func(function(self) {
+            var pickupCmd = new Pylearn.Command.PickUpCommand(SkulptAnimator, SkulptLevel);
+            Sk.commandChain.append(pickupCmd, Sk.currLineNo);
+         });
          $loc.position = new Sk.builtin.func(function(self) {
             var pos = self.character.position();
 

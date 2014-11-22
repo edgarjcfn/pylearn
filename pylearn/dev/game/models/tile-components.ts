@@ -51,7 +51,7 @@ module Pylearn.Model {
         }
 
         onPlayerAction(action:String, levelController:LevelController):void {
-            if (action == "attack") {
+            if (action == "pickUp") {
                 levelController.capturedChest();
             }
         }

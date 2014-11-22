@@ -60,6 +60,12 @@ module Pylearn.Controller {
             animation.onComplete.add(next);
         }
 
+        pickUp(next: ControllerDelegate) : void {
+            var animationName = 'idle' + this.character.direction;
+            this.sprite.animations.play(animationName);
+            next();
+        }
+
         
     } 
 }

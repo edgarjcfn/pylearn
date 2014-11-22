@@ -98,6 +98,18 @@ var Pylearn;
             return TurnRightCommand;
         })();
         Command.TurnRightCommand = TurnRightCommand;
+        var PickUpCommand = (function () {
+            function PickUpCommand(animator, tileController) {
+                this.animator = animator;
+                this.tileController = tileController;
+            }
+            PickUpCommand.prototype.execute = function () {
+                this.tileController.playerActionOnTile("pickUp");
+                this.animator.pickUp(this.next);
+            };
+            return PickUpCommand;
+        })();
+        Command.PickUpCommand = PickUpCommand;
         var AttackCommand = (function () {
             function AttackCommand(animator, tileController) {
                 this.animator = animator;
@@ -155,6 +167,11 @@ var Pylearn;
                 var animationName = 'attack' + this.character.direction;
                 var animation = this.sprite.animations.play(animationName);
                 animation.onComplete.add(next);
+            };
+            CharacterController.prototype.pickUp = function (next) {
+                var animationName = 'idle' + this.character.direction;
+                this.sprite.animations.play(animationName);
+                next();
             };
             return CharacterController;
         })();
@@ -415,7 +432,7 @@ var Pylearn;
                 builder.treasureChests++;
             };
             ChestTileComponent.prototype.onPlayerAction = function (action, levelController) {
-                if (action == "attack") {
+                if (action == "pickUp") {
                     levelController.capturedChest();
                 }
             };

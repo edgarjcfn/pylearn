@@ -85,6 +85,25 @@ module Pylearn.Command {
 	}
 
 	//
+	// Pick up treasure
+	//
+	export class PickUpCommand implements ICommand {
+		next: Pylearn.Controller.ControllerDelegate;
+		animator: CharacterAnimator;
+		tileController: Pylearn.Interfaces.ITileController;
+
+		constructor(animator: CharacterAnimator, tileController:Pylearn.Interfaces.ITileController) {
+			this.animator = animator;
+			this.tileController = tileController;
+		}
+
+		execute():void {
+			this.tileController.playerActionOnTile("pickUp");
+			this.animator.pickUp(this.next);
+		}
+	}
+
+	//
 	// Attack!
 	//
 	export class AttackCommand implements ICommand {
