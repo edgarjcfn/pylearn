@@ -27,13 +27,16 @@ module Pylearn.Model {
             {
                 case "O":
                     this.addComponent(new EmptyTileComponent());
+                    break;
                 case "X":
                     this.addComponent(new ChestTileComponent());
+                    break;
                 case "N":
                 case "S":
                 case "E":
                 case "W":
                     this.addComponent(new SpawnPlayerComponent(jsonData));
+                    break;
             }
         }
 

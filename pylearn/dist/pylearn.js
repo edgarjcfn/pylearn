@@ -115,11 +115,11 @@ var Pylearn;
     var Controller;
     (function (Controller) {
         var CharacterController = (function () {
-            function CharacterController(game, pirate) {
-                this.character = pirate;
+            function CharacterController(game) {
                 this.game = game;
             }
-            CharacterController.prototype.create = function () {
+            CharacterController.prototype.create = function (pirate) {
+                this.character = pirate;
                 var worldPos = Pylearn.Util.getWorldPosition(this.character.position);
                 this.sprite = this.game.isoPlugin.addIsoSprite(worldPos.x, worldPos.y, 0, 'pirate', 0);
                 this.sprite.anchor.set(0.5, 0.5);
@@ -172,13 +172,28 @@ var Pylearn;
                 this.isoGroup = this.game.add.group();
                 this.levelName = levelName;
             }
-            LevelController.prototype.setPlayerSpawn = function (isoX, isoY, direction) {
+            LevelController.prototype.setPlayerSpawn = function (isoX, isoY, directionName) {
+                var direction = this.directionFromString(directionName);
+                this.pirate = new Pylearn.Model.Character(isoX, isoY, direction);
             };
             LevelController.prototype.addIsoSprite = function (isoX, isoY, spriteName) {
                 var screenX = isoX * 64;
                 var screenY = isoY * 64;
                 var tile = this.game.isoPlugin.addIsoSprite(screenX, screenY, 0, spriteName, 0, this.isoGroup);
                 tile.anchor.set(0.5, 0);
+            };
+            LevelController.prototype.directionFromString = function (dir) {
+                switch (dir) {
+                    case "N":
+                        return 0 /* N */;
+                    case "S":
+                        return 2 /* S */;
+                    case "E":
+                        return 1 /* E */;
+                    case "W":
+                        return 3 /* W */;
+                }
+                return 0 /* N */;
             };
             LevelController.prototype.create = function () {
                 var levelJson = this.game.cache.getText(this.levelName);
@@ -376,13 +391,16 @@ var Pylearn;
                 switch (jsonData) {
                     case "O":
                         this.addComponent(new Model.EmptyTileComponent());
+                        break;
                     case "X":
                         this.addComponent(new Model.ChestTileComponent());
+                        break;
                     case "N":
                     case "S":
                     case "E":
                     case "W":
                         this.addComponent(new Model.SpawnPlayerComponent(jsonData));
+                        break;
                 }
             };
             Tile.prototype.addComponent = function (comp) {
@@ -442,11 +460,10 @@ var Pylearn;
         }
         Gameplay.prototype.create = function () {
             var levelToPlay = 'level01';
-            var pirate = new Pylearn.Model.Character(0, 0, 0 /* N */);
             this.level = new Pylearn.Controller.LevelController(this.game, levelToPlay);
-            this.character = new Pylearn.Controller.CharacterController(this.game, pirate);
+            this.character = new Pylearn.Controller.CharacterController(this.game);
             this.level.create();
-            this.character.create();
+            this.character.create(this.level.pirate);
             SkulptAnimator = this.character;
         };
         return Gameplay;

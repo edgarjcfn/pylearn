@@ -16,12 +16,13 @@ module Pylearn.Controller {
         game: Pylearn.Game;
         sprite: Phaser.Sprite;
 
-        constructor(game:Pylearn.Game, pirate:Pylearn.Model.Character) {
-            this.character = pirate;
+        constructor(game:Pylearn.Game) {
             this.game = game;
         }
         
-        create() {
+        create(pirate:Pylearn.Model.Character) {
+            this.character = pirate;
+            
             var worldPos = Pylearn.Util.getWorldPosition(this.character.position);
             this.sprite = this.game.isoPlugin.addIsoSprite(worldPos.x, worldPos.y, 0, 'pirate', 0);
             this.sprite.anchor.set(0.5, 0.5);
