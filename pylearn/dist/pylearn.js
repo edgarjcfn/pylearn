@@ -99,10 +99,12 @@ var Pylearn;
         })();
         Command.TurnRightCommand = TurnRightCommand;
         var AttackCommand = (function () {
-            function AttackCommand(controller) {
-                this.animator = controller;
+            function AttackCommand(animator, tileController) {
+                this.animator = animator;
+                this.tileController = tileController;
             }
             AttackCommand.prototype.execute = function () {
+                this.tileController.playerActionOnTile("attack");
                 this.animator.attack(this.next);
             };
             return AttackCommand;
@@ -142,20 +144,16 @@ var Pylearn;
                 var worldPos = Pylearn.Util.getWorldPosition(tile);
                 var animationName = 'walk' + this.character.direction;
                 var animation = this.sprite.animations.play(animationName);
-                console.log(animation);
                 var moveTween = this.game.add.tween(this.sprite).to({ 'isoX': worldPos.x, 'isoY': worldPos.y }, 1000);
                 moveTween.onComplete.add(next);
                 moveTween.start();
-                console.log(moveTween);
             };
             CharacterController.prototype.rotateTo = function (direction, next) {
                 next();
             };
             CharacterController.prototype.attack = function (next) {
                 var animationName = 'attack' + this.character.direction;
-                console.log(animationName);
                 var animation = this.sprite.animations.play(animationName);
-                console.log(animation);
                 animation.onComplete.add(next);
             };
             return CharacterController;
@@ -169,6 +167,7 @@ var Pylearn;
     (function (Controller) {
         var LevelController = (function () {
             function LevelController(game, levelName) {
+                this.treasureChests = 0;
                 this.introIndex = 0;
                 this.successIndex = 0;
                 this.game = game;
@@ -186,6 +185,13 @@ var Pylearn;
                 var screenY = isoY * 64;
                 var tile = this.game.isoPlugin.addIsoSprite(screenX, screenY, 0, spriteName, 0, this.isoGroup);
                 tile.anchor.set(anchorX, anchorY);
+            };
+            LevelController.prototype.capturedChest = function () {
+                console.debug("Captured chest");
+                this.treasureChests--;
+                this.checkGameOver();
+            };
+            LevelController.prototype.checkGameOver = function () {
             };
             LevelController.prototype.directionFromString = function (dir) {
                 switch (dir) {
@@ -225,6 +231,11 @@ var Pylearn;
                     this.successIndex++;
                 }
                 return message;
+            };
+            LevelController.prototype.playerActionOnTile = function (action) {
+                var tilePosition = this.pirate.position;
+                var tile = this.level.getTileAt(tilePosition.x, tilePosition.y);
+                tile.onPlayerAction(action, this);
             };
             return LevelController;
         })();
@@ -319,6 +330,8 @@ var Pylearn;
                 this.winMessages = [];
             }
             Level.prototype.loadFromJson = function (json) {
+                this.height = json.tiles.length;
+                this.width = json.tiles[0].length;
                 for (var y = 0; y < json.tiles.length; y++) {
                     var rows = json.tiles[y];
                     for (var x = 0; x < rows.length; x++) {
@@ -338,6 +351,10 @@ var Pylearn;
                     var message = new Model.Message(jsonData.title, jsonData.content, 'success');
                     this.winMessages.push(message);
                 }
+            };
+            Level.prototype.getTileAt = function (x, y) {
+                var tile = this.tiles[y * this.width + x];
+                return tile;
             };
             return Level;
         })();
@@ -359,7 +376,7 @@ var Pylearn;
         Model.Message = Message;
     })(Model = Pylearn.Model || (Pylearn.Model = {}));
 })(Pylearn || (Pylearn = {}));
-var LevelBuilder = Pylearn.Controller.LevelController;
+var LevelController = Pylearn.Controller.LevelController;
 var Pylearn;
 (function (Pylearn) {
     var Model;
@@ -382,7 +399,7 @@ var Pylearn;
             EmptyTileComponent.prototype.setTile = function (tile) {
                 this.tile = tile;
             };
-            EmptyTileComponent.prototype.onPlayerAction = function (action) {
+            EmptyTileComponent.prototype.onPlayerAction = function (action, levelController) {
             };
             return EmptyTileComponent;
         })();
@@ -395,6 +412,12 @@ var Pylearn;
             ChestTileComponent.prototype.build = function (builder) {
                 builder.addIsoSprite(this.tile.position.x, this.tile.position.y, 'blue-tile');
                 builder.addIsoSprite(this.tile.position.x, this.tile.position.y, 'chest');
+                builder.treasureChests++;
+            };
+            ChestTileComponent.prototype.onPlayerAction = function (action, levelController) {
+                if (action == "attack") {
+                    levelController.capturedChest();
+                }
             };
             return ChestTileComponent;
         })(EmptyTileComponent);
@@ -472,6 +495,11 @@ var Pylearn;
                     this._components[i].build(levelBuilder);
                 }
             };
+            Tile.prototype.onPlayerAction = function (action, levelController) {
+                for (var i = 0; i < this._components.length; i++) {
+                    this._components[i].onPlayerAction(action, levelController);
+                }
+            };
             return Tile;
         })();
         Model.Tile = Tile;
@@ -511,6 +539,7 @@ var Pylearn;
             this.levelController.create();
             this.characterController.create(this.levelController.pirate);
             SkulptAnimator = this.characterController;
+            SkulptLevel = this.levelController;
             this.messageController.showIntro();
         };
         return Gameplay;

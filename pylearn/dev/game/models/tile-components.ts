@@ -1,17 +1,17 @@
-import LevelBuilder = Pylearn.Controller.LevelController;
+import LevelController = Pylearn.Controller.LevelController;
 
 module Pylearn.Model {
-	export enum TileTypeId {
-		Simple,
-		Chest,
+    export enum TileTypeId {
+        Simple,
+        Chest,
         SpawnPlayer
-	}
+    }
 
     export interface ITileComponent {
-    	id():TileTypeId;
-        build(builder:LevelBuilder):void;
+        id():TileTypeId;
+        build(builder:LevelController):void;
         setTile(tile:Tile):void;
-        onPlayerAction(action:String):void;
+        onPlayerAction(action:String, builder:LevelController):void;
     }
 
     // 
@@ -19,22 +19,22 @@ module Pylearn.Model {
     // 
     export class EmptyTileComponent implements ITileComponent {
 
-    	tile:Tile;
+        tile:Tile;
 
-    	id():TileTypeId {
-    		return TileTypeId.Simple;
-    	}
+        id():TileTypeId {
+            return TileTypeId.Simple;
+        }
 
-        build(builder:LevelBuilder):void {
-        	builder.addIsoSprite(this.tile.position.x, this.tile.position.y, 'tile');
+        build(builder:LevelController):void {
+            builder.addIsoSprite(this.tile.position.x, this.tile.position.y, 'tile');
         }
 
         setTile(tile:Tile):void {
-        	this.tile = tile;
+            this.tile = tile;
         }
 
-        onPlayerAction(action:String):void {
-        	// do nothing
+        onPlayerAction(action:String, levelController:LevelController):void {
+            // do nothing
         }
 
     }
@@ -44,9 +44,16 @@ module Pylearn.Model {
     // 
     export class ChestTileComponent extends EmptyTileComponent {
 
-    	build(builder:LevelBuilder):void {
-        	builder.addIsoSprite(this.tile.position.x, this.tile.position.y, 'blue-tile');
-        	builder.addIsoSprite(this.tile.position.x, this.tile.position.y, 'chest');
+        build(builder:LevelController):void {
+            builder.addIsoSprite(this.tile.position.x, this.tile.position.y, 'blue-tile');
+            builder.addIsoSprite(this.tile.position.x, this.tile.position.y, 'chest');
+            builder.treasureChests++;
+        }
+
+        onPlayerAction(action:String, levelController:LevelController):void {
+            if (action == "attack") {
+                levelController.capturedChest();
+            }
         }
     }
 
@@ -54,17 +61,17 @@ module Pylearn.Model {
     // Spawn Player
     // 
     export class SpawnPlayerComponent extends EmptyTileComponent {
-    	direction:String;
+        direction:String;
 
-    	constructor(direction:String) {
-    		super();
-    		this.direction = direction;
-    	}
+        constructor(direction:String) {
+            super();
+            this.direction = direction;
+        }
 
-    	build(builder:LevelBuilder):void {
-    		super.build(builder);
-    		builder.setPlayerSpawn(this.tile.position.x, this.tile.position.y, this.direction);
-    	}
+        build(builder:LevelController):void {
+            super.build(builder);
+            builder.setPlayerSpawn(this.tile.position.x, this.tile.position.y, this.direction);
+        }
     }
 
 }

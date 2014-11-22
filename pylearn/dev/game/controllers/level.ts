@@ -1,11 +1,12 @@
 module Pylearn.Controller {
-    export class LevelController implements Pylearn.Interfaces.IMessageProvider{
+    export class LevelController implements Pylearn.Interfaces.IMessageProvider, Pylearn.Interfaces.ITileController{
 
         game:Pylearn.Game;
         isoGroup:Phaser.Group;
         levelName:String;
         pirate:Pylearn.Model.Character;
         level:Pylearn.Model.Level;
+        treasureChests:number = 0;
 
         constructor(game: Pylearn.Game, levelName:String) {
             this.game = game;
@@ -24,6 +25,16 @@ module Pylearn.Controller {
 
             var tile = this.game.isoPlugin.addIsoSprite(screenX, screenY, 0, spriteName, 0, this.isoGroup);
             tile.anchor.set(anchorX, anchorY);
+        }
+
+        capturedChest():void {
+            console.debug("Captured chest");
+            this.treasureChests--;
+            this.checkGameOver();
+        }
+
+        checkGameOver():void {
+            //TODO: Check Game Over
         }
 
         directionFromString(dir:String):Pylearn.Model.Direction {
@@ -50,7 +61,7 @@ module Pylearn.Controller {
         }
 
         // 
-        // IMessageProvider
+        // IMessageProvider implementation
         //
         introIndex:number = 0;
         successIndex:number = 0;
@@ -72,5 +83,13 @@ module Pylearn.Controller {
             return message;
         }
 
+        // 
+        // ITileController implementation
+        //
+        playerActionOnTile(action:String):void {
+            var tilePosition = this.pirate.position;
+            var tile = this.level.getTileAt(tilePosition.x, tilePosition.y);
+            tile.onPlayerAction(action, this);
+        }
     }
 }

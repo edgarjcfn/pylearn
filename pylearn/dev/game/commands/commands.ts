@@ -1,3 +1,5 @@
+import CharacterAnimator = Pylearn.Interfaces.ICharacterController;
+
 module Pylearn.Command {
 
 	export interface ICommand {
@@ -11,9 +13,9 @@ module Pylearn.Command {
 	export class MoveCommand implements ICommand {
 		next: Pylearn.Controller.ControllerDelegate;
 		amount: number;
-		animator: Pylearn.Interfaces.ICharacterController;
+		animator: CharacterAnimator;
 
-		constructor(amount: number, controller: Pylearn.Interfaces.ICharacterController) {
+		constructor(amount: number, controller: CharacterAnimator) {
 			this.amount = amount;
 			this.animator = controller;
 		}
@@ -46,9 +48,9 @@ module Pylearn.Command {
 	//
 	export class TurnLeftCommand implements ICommand {
 		next: Pylearn.Controller.ControllerDelegate;
-		animator: Pylearn.Interfaces.ICharacterController;
+		animator: CharacterAnimator;
 
-		constructor(controller: Pylearn.Interfaces.ICharacterController) {
+		constructor(controller: CharacterAnimator) {
 			this.animator = controller;
 		}
 
@@ -68,9 +70,9 @@ module Pylearn.Command {
 	// 
 	export class TurnRightCommand implements ICommand {
 		next: Pylearn.Controller.ControllerDelegate;
-		animator: Pylearn.Interfaces.ICharacterController;
+		animator: CharacterAnimator;
 
-		constructor(controller: Pylearn.Interfaces.ICharacterController) {
+		constructor(controller: CharacterAnimator) {
 			this.animator = controller;
 		}
 
@@ -87,16 +89,17 @@ module Pylearn.Command {
 	//
 	export class AttackCommand implements ICommand {
 		next: Pylearn.Controller.ControllerDelegate;
-		animator: Pylearn.Interfaces.ICharacterController;
+		animator: CharacterAnimator;
+		tileController: Pylearn.Interfaces.ITileController;
 
-		constructor(controller: Pylearn.Interfaces.ICharacterController) {
-			this.animator = controller;
+		constructor(animator: CharacterAnimator, tileController:Pylearn.Interfaces.ITileController) {
+			this.animator = animator;
+			this.tileController = tileController;
 		}
 
 		execute():void {
-			
+			this.tileController.playerActionOnTile("attack");
 			this.animator.attack(this.next);
-
 		}
 	}
 }

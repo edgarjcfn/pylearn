@@ -44,36 +44,7 @@
 
 char = mygame.Character();
 
-"""
-" Do a square lap
-"""
-char.turnRight();
-char.moveForward(3);
-char.turnRight();
-char.moveForward(3);
-char.turnRight();
-char.moveForward(3);
-char.turnRight();
-char.moveForward(3);
-
-"""
-" Do a Zig-Zag
-"""
-char.turnRight();
-for x in range(0,3):
-    char.moveForward(1);
-    char.turnRight();
-    char.moveForward(1);
-    char.turnLeft();
-"""
-" Attack!
-"""
-char.attack();
-char.turnLeft();
-char.moveForward(3);
-char.attack();
-char.turnLeft();
-char.moveForward(3);
+char.moveForward(1);
 char.attack();
 
   </div><br /> 
@@ -100,7 +71,7 @@ char.attack();
               text: message,
               type: icon,
               showCancelButton: false,
-              confirmButtonColor: "#DD6B55",
+              confirmButtonColor: "#4183D7",
               confirmButtonText: "OK",
               closeOnConfirm: false
             }, callback);

@@ -44,12 +44,10 @@ module Pylearn.Controller {
 
             var animationName = 'walk'+ this.character.direction;
             var animation = this.sprite.animations.play(animationName);
-            console.log(animation);
-
+            
             var moveTween = this.game.add.tween(this.sprite).to({'isoX':worldPos.x, 'isoY':worldPos.y}, 1000);
             moveTween.onComplete.add(next);
             moveTween.start();
-            console.log(moveTween);
         }
 
         rotateTo(direction: Pylearn.Model.Direction, next: ControllerDelegate) : void {
@@ -58,9 +56,7 @@ module Pylearn.Controller {
 
         attack(next: ControllerDelegate) : void {
             var animationName = 'attack'+this.character.direction;
-            console.log(animationName);
             var animation = this.sprite.animations.play(animationName);
-            console.log(animation);
             animation.onComplete.add(next);
         }
 
