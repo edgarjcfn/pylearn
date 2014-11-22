@@ -13,11 +13,11 @@ A game to learn python by typing into a browser-based interpreter
  - [Ace](http://ace.c9.io/) - In-browse code editor
  - Tiles from [OpenGameArt.Org](http://opengameart.org/content/isometric-painted-game-assets)
  - Character Sprites from [Rener's Tile Sets](http://www.reinerstilesets.de)
+ - [Sweet Alert](https://github.com/t4t5/sweetalert) - Beautiful dialogs
 
 ## TODO 
  - [x] Migrate to Typescript
- - [ ] Implement Level Loading
- - [ ] Implement Level Progression (instructions, win/lose)
- - [ ] Add more scenes (preloading, main menu, level select, etc)
- - [ ] Add tutorials
+ - [X] Implement Level Loading
+ - [X] Implement Level Progression (instructions, win/lose)
+ - [ ] Make it look nicer
  - [ ] Add proper nice/matching graphics
