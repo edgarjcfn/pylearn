@@ -45,11 +45,12 @@ A game to learn python by typing into a browser-based interpreter
 ## Contributing
 I'm gladly accepting contributions both in code and in art/design. Send Pull Requests!
 
-## TODO 
+## TODO
  - [x] Migrate to Typescript
  - [X] Implement Level Loading
  - [X] Implement Level Progression (instructions, win/lose)
  - [ ] Load supporting python file with initial code for each level
+ - [ ] Add a Restart (Reset) button
  - [ ] Make page look nicer
  - [ ] Make game look nicer
  - [ ] Add more objective types
