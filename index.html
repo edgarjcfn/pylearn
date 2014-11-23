@@ -17,7 +17,7 @@
   <style type="text/css" media="screen">
   #editor { 
     position: absolute;
-    top: 40;
+    top: 80;
     right: 0;
     bottom: 0;
     left: 0;
@@ -27,25 +27,40 @@
   }
 
   #gameContainer {
-    border:0 40 0 0; 
+    border:0 80 0 0; 
     width:60%; 
     height:600px; 
     float:right
+  }
+
+  #runButton {
+    background-color: #AEDEF4;
+    color: white;
+    border: none;
+    box-shadow: none;
+    font-size: 17px;
+    font-weight: 500;
+    border-radius: 5px;
+    padding: 10px 32px;
+    /*margin: 26px 5px 0 5px;*/
+    cursor: pointer;
+    box-shadow: rgba(65, 131, 215, 0.8) 0px 0px 2px, rgba(0, 0, 0, 0.0470588) 0px 0px 0px 1px inset; 
+    background-color: rgb(65, 131, 215);
   }
   </style>
 
 </head> 
 
-<body>
+<body style="background-color:#000">
 
-  <button type="button" onclick="runPython()">Run</button> 
+  <button id="runButton" onclick="runPython()">Run</button> 
   
 <div id="editor">import mygame
 
-char = mygame.Character();
+pyrate = mygame.Character();
 
-char.moveForward(1);
-char.pickUp();
+pyrate.moveForward(1);
+pyrate.pickUp();
 
   </div><br /> 
 
@@ -57,7 +72,7 @@ char.pickUp();
   {
     // Setup Code Editor
     var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/monokai");
+    editor.setTheme("ace/theme/katzenmilch");
     editor.getSession().setMode("ace/mode/python");
     editor.setFontSize('16pt');
     editor.setHighlightActiveLine(true);
